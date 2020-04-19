@@ -1,0 +1,3120 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://gorails.com/deploy/ubuntu/18.04 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="Content-Language" content="en_US">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) | GoRails</title>
+<meta name="stripe-key" content="pk_daFP6nPmDBA00HxJrslPhckbWUZ92">
+<meta name="google-site-verification" content="ju-3k3BBfiCNNz3Ug59RQi-dTrGY5uI4wG7L8SHNjRo">
+<meta name="keywords" content="rails, ruby on rails, screencasts, gorails, railscast, railscasts, tips, tricks, tutorials, training, podcasts, programming">
+<meta name="description" content="A guide to setting up a Ruby on Rails production environment on Ubuntu 18.04 Bionic Beaver with Git, MySQL, PostgreSQL, and Capistrano">
+
+<link rel="author" href="https://plus.google.com/106699287110566383664/posts">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@GoRails">
+<meta name="twitter:title" content="Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) | GoRails">
+<meta name="twitter:description" content="A guide to setting up a Ruby on Rails production environment on Ubuntu 18.04 Bionic Beaver with Git, MySQL, PostgreSQL, and Capistrano">
+<meta name="twitter:creator" content="@excid3">
+<meta name="twitter:image" content="https://d2i2nj5el4wq1j.cloudfront.net/assets/open-graph-a4a29a9e779f665ab0a606152d8714e8f465bdf835e64de14d798bb62ff3eeb9.jpg">
+<meta property="og:title" content="Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) | GoRails - GoRails">
+<meta property="og:url" content="https://gorails.com/deploy/ubuntu/18.04">
+<meta property="og:type" content="website">
+<meta property="og:description" content="A guide to setting up a Ruby on Rails production environment on Ubuntu 18.04 Bionic Beaver with Git, MySQL, PostgreSQL, and Capistrano">
+<meta property="og:site_name" content="GoRails">
+<meta property="og:image" content="https://d2i2nj5el4wq1j.cloudfront.net/assets/open-graph-a4a29a9e779f665ab0a606152d8714e8f465bdf835e64de14d798bb62ff3eeb9.jpg">
+<link rel="stylesheet" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/css">
+<script async="" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/profitwell.js"></script><script async="" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/analytics.js"></script><script src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/e11af360e9.js" crossorigin="anonymous"></script><link rel="stylesheet" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/pro-v4-shims.min.css" media="all"><link rel="stylesheet" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/pro.min.css" media="all"><link rel="stylesheet" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/pro-v4-font-face.min.css" media="all">
+<link rel="stylesheet" media="all" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/application-06a8d23ed766c609d8b5bfdfffda146317eab31a5bba30582c92ba0fbe1de82a.css" data-turbolinks-track="reload">
+<script src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/saved_resource" data-turbolinks-track="reload"></script>
+<script src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/braintree.js" data-turbolinks-track="reload"></script>
+<script src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/application-d48c5307ea324b18c46d.js" data-turbolinks-track="reload"></script>
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="0n24rOMG0SgT0U1jI4RC986BbuALzhiPsHO6ohlOovHKZgkOAwQ+uzxBIpimaoP/QLEayCfjbraM8X1aYZ5wDA==">
+<meta name="apple-mobile-web-app-title" content="GoRails">
+<meta name="application-name" content="GoRails">
+<link rel="apple-touch-icon" sizes="180x180" href="https://gorails.com/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://gorails.com/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://gorails.com/favicon-16x16.png">
+<link rel="manifest" href="https://gorails.com/site.webmanifest">
+<link rel="mask-icon" href="https://gorails.com/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://gorails.com/blog.rss">
+<script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-8399719-16', 'auto');
+  </script>
+
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<a class="sr-only" href="https://gorails.com/deploy/ubuntu/18.04#content">Skip to main content</a>
+<header id="header-main">
+
+<div id="search-main" class="navbar-search">
+<div class="container">
+
+<form class="navbar-search-form" action="https://gorails.com/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
+<div class="form-group">
+<div class="input-group input-group-transparent">
+<div class="input-group-prepend">
+<span class="input-group-text"><i class="fas fa-search" aria-hidden="true"></i></span>
+</div>
+<input type="text" name="q" id="q" class="form-control" placeholder="What do you want to learn?">
+</div>
+</div>
+</form>
+</div>
+</div>
+
+<nav class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-dark bg-gradient-dark" id="navbar-main">
+<div class="container">
+<a class="navbar-brand mr-lg-5" href="https://gorails.com/">
+<img alt="GoRails Logo" title="GoRails" style="height: 20px;" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/logo-white-2ff3ecfb6b8f3c5bf9a6679ad0b135529dad66478a5dd89718935c798886a505.svg">
+</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main-collapse" aria-controls="navbar-main-collapse" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbar-main-collapse">
+<ul class="navbar-nav align-items-lg-center">
+<li class="nav-item dropdown dropdown-animate" data-toggle="hover">
+<a class="nav-link" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Screencasts</a>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow py-0">
+<div class="list-group">
+<a class="list-group-item list-group-item-action" href="https://gorails.com/series">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/icons8-movies-folder-64-49c8b81d015dcf2c8f815ad3a8cbf2ebbfbb2f5d193d0e1b8292f37ced2a81d0.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">By Topic</h6>
+<p class="mb-0">View screencasts by curated topics.</p>
+</div>
+</div>
+</a> <a class="list-group-item list-group-item-action" href="https://gorails.com/episodes">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/icons8-movie-64-2bdc3f07520a8f01376b185327d1df863851b483aae11c0d38192c3a81597324.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">All Episodes</h6>
+<p class="mb-0">Dive into the archive of all episodes.</p>
+</div>
+</div>
+</a>
+<div class="border-top">
+<h6 class="px-4 pt-3 mt-1 text-xs text-uppercase text-muted">Latest Episode</h6>
+<a class="list-group-item list-group-item-action" href="https://gorails.com/episodes/webpack-require-context">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/9ce19fb7c3aa120abc5fec2592e011bb.jpg">
+<div class="media-body ml-3">
+<h6 class="mb-1">How to use Webpack require.context</h6>
+<p class="mb-0">Webpacker provides some nic...</p>
+</div>
+</div>
+</a> </div>
+</div>
+</div>
+</li>
+<li class="nav-item dropdown dropdown-animate" data-toggle="hover">
+<a class="nav-link" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Guides</a>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow py-0">
+<div class="list-group">
+<a class="list-group-item list-group-item-action" href="https://gorails.com/setup">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/icons8-mac-client-64-c96ae06bec926eb762fe017173a64e45ca063a0f808dee527ba1ce599f2d3e20.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">Install Rails</h6>
+<p class="mb-0">Setup your development environment.</p>
+</div>
+</div>
+</a>
+<a class="list-group-item list-group-item-action" href="https://gorails.com/deploy/ubuntu">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/icons8-thin-client-64-4e434734984012013ada635b816da9cfefae8f8826f3c4f07c83c852ccc728d4.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">Deploy Rails</h6>
+<p class="mb-0">Configure your production server.</p>
+</div>
+</div>
+</a>
+<a class="list-group-item list-group-item-action" href="https://gorails.com/deploy/actioncable">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/icons8-audio-cable-64-51b3cf84a4b289d667371f56e4dc9635393dd22cc40e60bcc58d52d5186022fe.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">Deploy ActionCable</h6>
+<p class="mb-0">Learn how to modify production to run websockets.</p>
+</div>
+</div>
+</a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item text-center mb-2" href="https://gorails.com/guides">See All Guides</a>
+</div>
+</div>
+</li>
+<li class="nav-item "><a class="nav-link" href="https://gorails.com/forum">Community</a></li>
+<li class="nav-item dropdown dropdown-animate" data-toggle="hover">
+<a class="nav-link dropdown-toggle" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+More
+</a>
+<div class="dropdown-menu dropdown-menu-lg dropdown-menu-arrow py-0">
+<a target="_blank" class="list-group-item list-group-item-action" href="https://hatchbox.io/?utm_source=gorails">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/hatchbox-icon-dbcb2a61ee4edf4f6af2a4d0ceda8968f0683435457dddb92b56ab62a98158d2.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">Hatchbox.io</h6>
+<p class="mb-0">Cheap, easy hosting for Ruby and Rails apps.</p>
+</div>
+</div>
+</a>
+<a target="_blank" class="list-group-item list-group-item-action" href="https://jumpstartrails.com/?utm_source=gorails">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/jumpstart-pro-974ba36eab414d0f0ae1955cc39ac37d23388e7d945af79ceadfe58f25416d46.svg">
+<div class="media-body ml-3">
+<h6 class="mb-1">Jumpstart Rails Template</h6>
+<p class="mb-0">Launch your product business way faster with our SaaS template.</p>
+</div>
+</div>
+</a>
+<div class="dropdown-divider"></div>
+<a target="_blank" class="list-group-item list-group-item-action" href="https://courses.gorails.com/payments-with-rails-master-class?utm_source=gorails">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/icons8-bank-cards-64-e07ccc94c5be18e372730a185709475a8d2215015b458909268579feff52b19e.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">Payments with Rails Master Class </h6>
+<p class="mb-0">Accept Payments with Stripe.</p>
+</div>
+</div>
+</a>
+<a target="_blank" class="list-group-item list-group-item-action" href="https://store.andrewfomera.com/learn-rails-by-building-instagram/owmsf?utm_source=gorails">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/icons8-picture-64-8c9d5648d887c767d29444b866fe7f93d846c68212c101e97e77e0b2a8af9ac1.png">
+<div class="media-body ml-3">
+<h6 class="mb-1">Learn Rails by Building Instagram</h6>
+<p class="mb-0">Building a simplified version of Instagram is a great way to learn Rails.</p>
+</div>
+</div>
+</a>
+<a target="_blank" class="list-group-item list-group-item-action" href="https://courses.gorails.com/refactoring-rails?utm_source=gorails">
+<div class="media d-flex align-items-center">
+<img class="img-saturate" style="width: 50px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/refactoring-rails-icon-ef7aa28ec6faa4e61c6e2eb1e41348b66d1a36a25cc884a0402525f7416660e0.svg">
+<div class="media-body ml-3">
+<h6 class="mb-1">Refactoring Rails</h6>
+<p class="mb-0">Expert advice on keeping Rails apps organized and fast.</p>
+</div>
+</div>
+</a> </div>
+</li>
+<li class="nav-item">
+<a href="https://gorails.com/deploy/ubuntu/18.04#" class="nav-link" data-action="search-open" data-target="#search-main"><i class="far fa-search" aria-hidden="true"></i></a>
+</li>
+</ul>
+<ul class="navbar-nav align-items-lg-center ml-lg-auto">
+<li class="nav-item"><a class="nav-link" href="https://gorails.com/pricing">Pricing</a></li>
+<li class="nav-item"><a class="nav-link" href="https://gorails.com/users/sign_in">Login</a></li>
+<li class="nav-item mr-0">
+<a class="nav-link d-lg-none" href="https://gorails.com/users/sign_up">Get started</a>
+<a class="btn btn-sm btn-info btn-circle btn-icon d-none d-lg-inline-flex" href="https://gorails.com/users/sign_up">
+<span class="btn-inner--text">Get started</span>
+<span class="btn-inner--icon"><i class="fas fa-angle-right" aria-hidden="true"></i></span>
+</a> </li>
+</ul>
+</div>
+</div>
+</nav>
+</header>
+<main>
+<section class="slice">
+
+<div class="container position-relative zindex-100">
+<div class="row row-grid justify-content-around align-items-center">
+<div class="col-md-9">
+<h1 class="lh-150 mb-3"><strong>Deploy Ruby On Rails:</strong><br> Ubuntu 18.04 Bionic Beaver in 2019</h1>
+<p class="lead text-muted mb-0">The definitive guide to deploying Ruby on Rails to production to your Virtual Private Server (VPS).</p>
+</div>
+</div>
+<h5 class="text-center mt-5">Operating System</h5>
+<ul class="nav nav-pills d-flex justify-content-center">
+<li class="nav-item"><a class="nav-link " href="https://gorails.com/deploy/ubuntu/20.04">Ubuntu 20.04</a></li>
+<li class="nav-item"><a class="nav-link active" href="https://gorails.com/deploy/ubuntu/18.04">Ubuntu 18.04</a></li>
+<li class="nav-item"><a class="nav-link " href="https://gorails.com/deploy/ubuntu/16.04">Ubuntu 16.04</a></li>
+<li class="nav-item"><a class="nav-link " href="https://gorails.com/deploy/ubuntu/14.04">Ubuntu 14.04</a></li>
+<li class="nav-item"><a class="nav-link " href="https://gorails.com/deploy/ubuntu/12.04">Ubuntu 12.04</a></li>
+</ul>
+</div>
+</section>
+<article>
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<p>If you've ever wondered how to deloy Ruby on Rails to production on your own server, you've come to the right place.</p>
+<p>I wrote this guide to cover the ENTIRE process from choosing a server, installing dependencies, configuring NGINX, setting up your database, and making your first deployment using Capistrano.</p>
+<p>So if you're looking to step up your Ruby on Rails game this year, you'll love this guide.</p>
+</div>
+</div>
+</div>
+<div class="container">
+<div class="embed-responsive embed-responsive-16by9 mb-4">
+<iframe class="embed-responsive-item" width="1280" height="720" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/vzEEfAj45zw.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<div class="container my-5 pb-5">
+<h3 class="text-center my-5">Contents</h3>
+<div class="row justify-content-md-center text-center mb-5">
+<div class="col col-lg-3">
+<a href="https://gorails.com/deploy/ubuntu/18.04#vps" class="text-dark">
+<div><img src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/server-de377cb3f903bfdfebd5c414d19aa44f4058aad4117249dcd068078331da957c.png"></div>
+<div class="font-weight-900 text-sm text-uppercase ">Chapter 1</div>
+<div class="text-lg">Creating a Server</div>
+</a>
+</div>
+<div class="col col-lg-3">
+<a href="https://gorails.com/deploy/ubuntu/18.04#ruby" class="text-dark">
+<div><img src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ruby-98f5c8a88926d095ddc1acdb664e0ef0ed2e8fd2eccede1a1b785cfeb97b5be2.png"></div>
+<div class="font-weight-900 text-sm text-uppercase ">Chapter 2</div>
+<div class="text-lg">Installing Ruby</div>
+</a>
+</div>
+<div class="col col-lg-3">
+<a href="https://gorails.com/deploy/ubuntu/18.04#nginx-passenger" class="text-dark">
+<div><img src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/browser-29c1617366fb370621b42949353fa1cdf90840139ff6118e49dc1bb568671973.png"></div>
+<div class="font-weight-900 text-sm text-uppercase ">Chapter 3</div>
+<div class="text-lg">Configuring A Web Server</div>
+</a>
+</div>
+</div>
+<div class="row justify-content-md-center text-center">
+<div class="col col-lg-3">
+<a href="https://gorails.com/deploy/ubuntu/18.04#database" class="text-dark">
+<div><img src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/database-105d42079d6f30d7d48db554c9a15fa1a7f76a34a65c311b5371e31324fc82a3.png"></div>
+<div class="font-weight-900 text-sm text-uppercase ">Chapter 4</div>
+<div class="text-lg">Creating A Database</div>
+</a>
+</div>
+<div class="col col-lg-3">
+<a href="https://gorails.com/deploy/ubuntu/18.04#capistrano" class="text-dark">
+<div><img src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/rocket-312d5d21e08a3ef4d84352f6d676119f7f0c6c5f73e209f7b37c46bc78c0c318.png"></div>
+<div class="font-weight-900 text-sm text-uppercase ">Chapter 5</div>
+<div class="text-lg">Deploying Code</div>
+</a>
+</div>
+<div class="col col-lg-3">
+<a href="https://gorails.com/deploy/ubuntu/18.04#final-steps" class="text-dark">
+<div><img src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/root-server-a439947f6abaec21e3d586e1d5450c00324c28d8da672d09ded034eb2af2cb6b.png"></div>
+<div class="font-weight-900 text-sm text-uppercase ">Chapter 6</div>
+<div class="text-lg">Next Steps</div>
+</a>
+</div>
+</div>
+</div>
+<section id="vps" class="slice bg-primary">
+<div class="container">
+<h6 class="text-center text-white text-uppercase font-weight-800">Chapter 1:</h6>
+<h2 class="text-center text-white">Creating a Production Server</h2>
+<hr>
+<div class="row">
+<div class="col-sm-4 offset-sm-2">
+<p class="text-white">A Virtual Private Server (VPS) is where our Rails application and all it's relevant services will live.</p>
+<p class="text-white">We have a ton of different options for this, so we'll discuss where to find a good VPS and how large of a server you should choose.</p>
+</div>
+<div class="col-sm-3 offset-sm-1">
+<img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/create-server-11192b2731a0ab1d983af3a6496f359630b0382985c610251efcefd6e74dea35.svg">
+</div>
+</div>
+</div>
+</section>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<h3 class="font-weight-800">Choosing a Server Hosting Provider</h3>
+<p>There are many, many options when it comes to hosting providers. These are the places that own servers in a datacenter and will rent them out to you monthly.</p>
+<p>It's important to buy a server at a place like this because they will handle issues with hardware failures and provide you a super fast internet connection which is crucial to running anything in production on the internet.</p>
+<p>Ignore <em>managed</em> hosting providers. They don't give enough control over your server to set things up and they're usually <em>very</em> outdated.</p>
+<p>Here are some hosting provider options:</p>
+<ul>
+<li class="font-weight-800"><a target="_blank" href="https://www.digitalocean.com/?refcode=87fcb9dab7a3">DigitalOcean</a> (Recommended)</li>
+<li><a target="_blank" href="https://www.linode.com/?r=a02b271802c33ff2f38b3d5335089d76648ca6c2">Linode</a></li>
+<li><a target="_blank" href="https://www.vultr.com/?ref=7302215">Vultr</a></li>
+<li><a target="_blank" href="https://aws.amazon.com/ec2/">Amazon EC2</a></li>
+<li><a target="_blank" href="https://aws.amazon.com/lightsail/">Amazon LightSail</a></li>
+<li><a target="_blank" href="https://www.packet.com/">Packet</a></li>
+<li><a target="_blank" href="https://cloud.google.com/compute/">Google Cloud</a></li>
+<li><a target="_blank" href="https://azure.microsoft.com/en-us/services/virtual-machines/">Microsoft Azure</a></li>
+<li>Any other provider that offers an Ubuntu server with root access</li>
+</ul>
+<p><strong>I recommend <a target="_blank" href="https://www.digitalocean.com/?refcode=87fcb9dab7a3">DigitalOcean</a> because it's super cheap, really fast, and the easiest to use by far.</strong> You'll save a good amount of money by using them and they continue offering lots of new products.</p>
+<p>Plus, if you use <a target="_blank" href="https://www.digitalocean.com/?refcode=87fcb9dab7a3">my DigitalOcean link</a>, you'll get $100 in free credit to spend over 60 days! That's a perfect way to try things out and see how it goes without spending a dime.</p>
+<h3 class="font-weight-800">What Size Server Do I Need?</h3>
+<p>Ruby and Rails apps tend to require a lot of RAM, so that's the main metric we're going to be focusing on when deciding what size server we should use. Plus, we'll need to run a database like Postgresql or MySQL as well as Redis for background workers. Each of these will require RAM to operate so we want to take those into account too.</p>
+<p><strong>If you're deploying for the first time, I'd recommend a 2GB RAM server ($10/mo).</strong> You might even be able to get by with a 1GB server, but you'll likely run out of RAM when compiling assets during deployment to production.</p>
+<p><strong><a target="_blank" href="https://gorails.com/">GoRails</a> uses a 4GB RAM server ($20/mo) and serves over <em>2 MILLION pages per year</em>!</strong> That's quite a lot of traffic and the server barely breaks a sweat.</p>
+<div class="my-3"><img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/gorails-c46468ceb1420bc920324dd506da74974f0d7e5d81bc47bf9cefcaf836aa71cb.png"></div>
+<p>If you have large dependencies like ElasticSearch, you'll have to add more RAM. ElasticSearch, for example, requires 4GB of RAM at a minimum, so you'll need to consider that <em>in addition</em> to what RAM you need for your Ruby and Rails apps. You can run ElasticSearch on a separate server to make it easier to scale the services up separately.</p>
+<h3 class="font-weight-800">Create Your Server</h3>
+<p>It's time for us to create our server. Open up DigitalOcean and go to the <em>Create Droplet</em> page.</p>
+<h4>Step 1: Choose your operating system</h4>
+<p>We want to use <strong>Ubuntu 18.04</strong> for our server's operating system. It's an long-term support (LTS) release which means it will receive security updates for several more years than normal. This is crucial for production.</p>
+<p>Choose <code>Ubuntu 18.04</code> from the dropdown in the <em>Choose an image</em> section.</p>
+<div class="my-3" style="width: 75%; margin: 0 auto;"><a target="_blank" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/droplet-image-aa78fa0089f7aaf4fcf63487b49180d5c284b048d95511fb18830086a9262261.png"><img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/droplet-image-aa78fa0089f7aaf4fcf63487b49180d5c284b048d95511fb18830086a9262261.png"></a></div>
+<h4>Step 2: Choose your size</h4>
+<p>Go ahead and select the server size under <em>Choose a size</em> based upon what you feel comfortable with.</p>
+<p><strong>Not sure what size to use? Just start with a 2GB RAM server.</strong> You can always resize the server to a larger size later without losing any data if you want. That's the nice part of these "virtual" servers. They're not real servers, so you easily add more RAM or CPUs to your server at any time.</p>
+<div class="my-3" style="width: 75%; margin: 0 auto;"><a target="_blank" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/droplet-image-aa78fa0089f7aaf4fcf63487b49180d5c284b048d95511fb18830086a9262261.png"><img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/droplet-size-42d0ceac430d440ca67b2475ca933bcfbe7ef1244d715ed4cd00d0ff700c1000.png"></a></div>
+<h4>Step 3: Choose your size</h4>
+<p>Next we'll choose the server region. This is the datacenter our server lives in. Choose one that's closest to where your users (or you) will be.</p>
+<div class="my-3" style="width: 75%; margin: 0 auto;"><a target="_blank" href="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/droplet-image-aa78fa0089f7aaf4fcf63487b49180d5c284b048d95511fb18830086a9262261.png"><img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/droplet-region-4dd6d034140008fe8c3e4a4e24cc1adfb45c761186292400909eb534ffac99a9.png"></a></div>
+<h4>Step 4: Optional settings</h4>
+<p>You can enable a few other options if you choose:</p>
+<ul>
+<li><strong>Private Networking</strong> - Useful if you want to have a separate database server, etc or talk to other servers in the datacenter.<p></p>
+</li><li><strong>IPv6</strong> - Enable this to give your server an IPv6 address. Can't hurt.<p></p>
+</li><li><strong>Monitoring</strong> - This is useful to get some rough metrics of server usage.<p></p>
+</li><li><strong>Backups</strong> - Backups up your entire server to an image that you can restore from. These usually don't run very often, so you can skip these if you want. <a target="_blank" href="https://gorails.com/guides/hourly-production-server-database-and-file-backups">Hourly database backups</a> are more useful.<p></p>
+</li></ul>
+<h4>Step 5: Create your server</h4>
+<p>Last, click "Create" to create your server. It will take about 60 seconds for DigitalOcean to create your server.</p>
+<p>Once that's complete, check your email for the password to the new server.</p>
+<p>You can login to your server as root by running the following command, just change <code>1.2.3.4</code> to your server's public IP address:</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>Local Machine</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="$">ssh root@1.2.3.4</div>
+</div>
+</section>
+</div>
+<h4>Step 6: Creating a Deploy user</h4>
+<p>To run software on our server, we're going to create a deploy user. The deploy user has limited permissions in production to help prevent anyone from getting full control of our server if a hacker broke into our server.</p>
+<p>While logged in as <code>root</code> on the server, we can run the following commands to create the deploy user and add them to the sudo group.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>root@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="root$">adduser deploy</div>
+<div class="line" prefix="root$">adduser deploy sudo</div>
+<div class="line" prefix="root$">exit</div>
+</div>
+</section>
+</div>
+<p>Next let's add our SSH key to the server to make it faster to login. We're using a tool called <code>ssh-copy-id</code> for this.</p><p>
+</p><p>If you're on a Mac, you may need to install ssh-copy-id with homebrew first: <code>brew install ssh-copy-id</code></p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>Local Machine</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="$">ssh-copy-id root@1.2.3.4</div>
+<div class="line" prefix="$">ssh-copy-id deploy@1.2.3.4</div>
+</div>
+</section>
+</div>
+<p>Now you can login as either <code>root</code> or <code>deploy</code> without having to type in a password!</p>
+<p>For the rest of this tutorial, we want to be logged in as deploy to setup everything. Let's SSH in as deploy now and we shouldn't be prompted for a password this time.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>Local Machine</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="$">ssh deploy@1.2.3.4</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<section id="ruby" class="slice bg-danger">
+<div class="container">
+<h6 class="text-center text-white text-uppercase font-weight-800">Chapter 2:</h6>
+<h2 id="vps" class="text-center text-white">Installing Ruby</h2>
+<hr>
+<div class="row">
+<div class="col-sm-4 offset-sm-2">
+<p class="text-white">Installing Ruby in production is similar to development except we need to make sure we have all the Linux dependencies installed to compile Ruby correctly.</p>
+<p class="text-white">We also want to use a Ruby version manager for this so we can easily deploy new versions of Ruby to production in the future without having to edit config files.</p>
+</div>
+<div class="col-sm-3 offset-sm-1">
+<img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/installing-ruby-6facbefeba0dbbe8cbe4803ec0c2f4333f53d176e08c5f4fb870526d8b752c0e.svg">
+</div>
+</div>
+</div>
+</section>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<h3 class="font-weight-800">Installing Ruby</h3>
+<p>We're going to be installing Ruby using a ruby version manager. You're probably using one in development, but this is also handy in production so it allows you to upgrade Ruby version in production quickly.</p>
+<p>The first step is to install some dependencies for compiling Ruby as well as some Rails dependencies.</p>
+<p>To make sure we have everything necessary for Webpacker support in Rails, we're first going to start by adding the Node.js and Yarn repositories to our system before installing them.</p>
+<p>We're also going to install Redis so we can use ActionCable for websockets in production as well. You might also want to configure Redis as your production store for caching.</p>
+<p>Make sure you're logged in as the <code>deploy</code> user on the server, and run the following commands:</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$"><span class="text-muted"># Adding Node.js repository</span></div>
+<div class="line" prefix="deploy$">curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># Adding Yarn repository</span></div>
+<div class="line" prefix="deploy$">curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -</div>
+<div class="line" prefix="deploy$">echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list</div>
+<div class="line" prefix="deploy$">sudo add-apt-repository ppa:chris-lea/redis-server</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># Refresh our packages list with the new repositories</span></div>
+<div class="line" prefix="deploy$">sudo apt-get update</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># Install our dependencies for compiiling Ruby along with Node.js and Yarn</span></div>
+<div class="line" prefix="deploy$">sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev dirmngr gnupg apt-transport-https ca-certificates redis-server redis-tools nodejs yarn</div>
+</div>
+</section>
+</div>
+<p>Yay! Now that we have our dependencies installed, we can begin installing Ruby.</p>
+<p>Choose the version of Ruby you want to install:</p>
+<div class="form-group">
+<select id="ruby_version" class="form-control">
+<option value="2.7.1">
+2.7.1 (Recommended)
+</option>
+<option value="2.6.6">
+2.6.6
+</option>
+<option value="2.5.8">
+2.5.8
+</option>
+<option value="2.4.10">
+2.4.10
+</option>
+<option value="2.3.8">
+2.3.8
+</option>
+<option value="2.2.10">
+2.2.10
+</option>
+<option value="2.1.10">
+2.1.10
+</option>
+<option value="2.0.0-p648">
+2.0.0-p648
+</option>
+</select>
+</div>
+<p>Next we're going to install Ruby using a Ruby version mmanager called <strong>rbenv</strong>. It is the easiest and simplest option, plus it comes with some handy plugins to let us easily manage environment variables in production.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$">git clone https://github.com/rbenv/rbenv.git ~/.rbenv</div>
+<div class="line" prefix="deploy$">echo 'export PATH="$HOME/.rbenv/bin:$PATH"' &gt;&gt; ~/.bashrc</div>
+<div class="line" prefix="deploy$">echo 'eval "$(rbenv init -)"' &gt;&gt; ~/.bashrc</div>
+<div class="line" prefix="deploy$">git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build</div>
+<div class="line" prefix="deploy$">echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' &gt;&gt; ~/.bashrc</div>
+<div class="line" prefix="deploy$">git clone https://github.com/rbenv/rbenv-vars.git ~/.rbenv/plugins/rbenv-vars</div>
+<div class="line" prefix="deploy$">exec $SHELL</div>
+<div class="line" prefix="deploy$">rbenv install <span class="ruby-version">2.7.1</span></div>
+<div class="line" prefix="deploy$">rbenv global <span class="ruby-version">2.7.1</span></div>
+<div class="line" prefix="deploy$">ruby -v</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># ruby <span class="ruby-version">2.7.1</span></span></div>
+</div>
+</section>
+</div>
+<p>The last step is to install Bundler:</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$"><span class="text-muted"># This installs the latest Bundler, currently 2.x.</span></div>
+<div class="line" prefix="deploy$">gem install bundler</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># For older apps that require Bundler 1.x, you can install it as well.</span></div>
+<div class="line" prefix="deploy$">gem install bundler -v 1.17.3</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># Test and make sure bundler is installed correctly, you should see a version number.</span></div>
+<div class="line" prefix="deploy$">bundle -v</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># Bundler version 2.0</span></div>
+</div>
+</section>
+</div>
+<p>If it tells you bundle not found, run <code>rbenv rehash</code> and try again.</p>
+</div>
+</div>
+</div>
+<section id="nginx-passenger" class="slice bg-blue">
+<div class="container">
+<h6 class="text-center text-white text-uppercase font-weight-800">Chapter 3:</h6>
+<h2 id="vps" class="text-center text-white">Configuring A Web Server</h2>
+<hr>
+<div class="row">
+<div class="col-sm-4 offset-sm-2">
+<p class="text-white">Rails won't live on its own in production. In front of Rails, we'll put up NGINX to handle SSL and serving static files because it's way faster than Ruby.</p>
+<p class="text-white">To run our Rails app, we'll install the Passenger module for NGINX to forward requests over to Rails.</p>
+</div>
+<div class="col-sm-3 offset-sm-1">
+<img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/installing-nginx-2e0ad65cf69f476e82233404ad067b8d8cfe9880d0009f420e031d7b94daa8bb.svg">
+</div>
+</div>
+</div>
+</section>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<h3 class="font-weight-800">Installing NGINX &amp; Passenger</h3>
+<p>For production, we'll be using NGINX as our webserver to receive HTTP requests. Those requests will then be handed over to Passenger which will run our Ruby app.</p>
+<p>Installing Passenger is pretty straightforward. We'll add their repository and then install and configure their packages.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$">sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7</div>
+<div class="line" prefix="deploy$">sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main &gt; /etc/apt/sources.list.d/passenger.list'</div>
+<div class="line" prefix="deploy$">sudo apt-get update</div>
+<div class="line" prefix="deploy$">sudo apt-get install -y nginx-extras libnginx-mod-http-passenger</div>
+<div class="line" prefix="deploy$">if [ ! -f /etc/nginx/modules-enabled/50-mod-http-passenger.conf ]; then sudo ln -s /usr/share/nginx/modules-available/mod-http-passenger.load /etc/nginx/modules-enabled/50-mod-http-passenger.conf ; fi</div>
+<div class="line" prefix="deploy$">sudo ls /etc/nginx/conf.d/mod-http-passenger.conf</div>
+</div>
+</section>
+</div>
+<p>Now that we have NGINX and Passenger installed, we need to point Passenger to the correct version of Ruby.</p>
+<p>We'll start by opening up the Passenger config file in your favorite editor, <code>nano</code> or <code>vim</code></p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$"><span class="text-muted"># If you want to use the Nano for editing</span></div>
+<div class="line" prefix="deploy$">sudo nano /etc/nginx/conf.d/mod-http-passenger.conf</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># If you want to use the Vim for editing</span></div>
+<div class="line" prefix="deploy$">sudo vim /etc/nginx/conf.d/mod-http-passenger.conf</div>
+</div>
+</section>
+</div>
+<p>We simply want to change the <code>passenger_ruby</code> line to match the following:</p>
+<pre><code>passenger_ruby /home/deploy/.rbenv/shims/ruby;</code></pre>
+<p>Save this file and we'll start NGINX.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$">sudo service nginx start</div>
+</div>
+</section>
+</div>
+<p>You can check and make sure NGINX is running by visiting your server's public IP address in your browser and you should be greeted with the "Welcome to NGINX" message.</p>
+<p>Next we're going to remove this default NGINX server and add one for our application instead.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$">sudo rm /etc/nginx/sites-enabled/default</div>
+<div class="line" prefix="deploy$"></div>
+<div class="line" prefix="deploy$"><span class="text-muted"># If you want to use the Nano for editing</span></div>
+<div class="line" prefix="deploy$">sudo nano /etc/nginx/sites-enabled/myapp</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># If you want to use the Vim for editing</span></div>
+<div class="line" prefix="deploy$">sudo vim /etc/nginx/sites-enabled/myapp</div>
+</div>
+</section>
+</div>
+<p>We want the contents of our NGINX site to look like the following.</p>
+<p>Change <code>myapp</code> to the name of your app. We'll use this same folder later on when we define our Capistrano <code>deploy_to</code> folder.</p>
+<pre><code>server {
+  listen 80;
+  listen [::]:80;
+
+  server_name _;
+  root /home/deploy/myapp/current/public;
+
+  passenger_enabled on;
+  passenger_app_env production;
+
+  location /cable {
+    passenger_app_group_name myapp_websocket;
+    passenger_force_max_concurrent_requests_per_process 0;
+  }
+
+  # Allow uploads up to 100MB in size
+  client_max_body_size 100m;
+
+  location ~ ^/(assets|packs) {
+    expires max;
+    gzip_static on;
+  }
+}</code></pre>
+<p>Save the file and then we'll reload NGINX to load the new server files.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$">sudo service nginx reload</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<section id="database" class="slice bg-dark">
+<div class="container">
+<h6 class="text-center text-white text-uppercase font-weight-800">Chapter 4:</h6>
+<h2 id="vps" class="text-center text-white">Creating A Database</h2>
+<hr>
+<div class="row">
+<div class="col-sm-4 offset-sm-2">
+<p class="text-white">For production, we'll need to create a new database for all our production records.</p>
+<p class="text-white">We recommend running PostgreSQL, but we'll also include MySQL for those of you more familiar with it.</p>
+</div>
+<div class="col-sm-3 offset-sm-1">
+<img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/create-database-a7bf4569c93df9e328f74439b2bd5e827a4cbd398c057036d0b30c5db785870d.svg">
+</div>
+</div>
+</div>
+</section>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<p><strong>We recommend PostgreSQL for your production database</strong> but feel free to use MySQL instead. Just follow the instructions for the database you want to use and skip to the next part when you're done.</p>
+<h3 class="font-weight-800">Creating a PostgreSQL Database</h3>
+<p>For Postgres, we're going to start by installing the Postgres server and libpq which will allow us to compile the pg rubygem.</p>
+<p>Then, we're going to become the <code>postgres</code> linux user who has full access to the database and use that account to create a new database user for our apps. We'll call that user <code>deploy</code>.</p>
+<p>And finally, the last command will create a database called <code>myapp</code> and make the <code>deploy</code> user owner.</p>
+<p>Make sure to change <code>myapp</code> to the name of your application.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$">sudo apt-get install postgresql postgresql-contrib libpq-dev</div>
+<div class="line" prefix="deploy$">sudo su - postgres</div>
+<div class="line" prefix="postgres$">createuser --pwprompt deploy</div>
+<div class="line" prefix="postgres$">createdb -O deploy myapp</div>
+<div class="line" prefix="postgres$">exit</div>
+</div>
+</section>
+</div>
+ <p>You can manually connect to your database anytime by running <code>psql -U deploy -W -h 127.0.0.1 -d myapp</code>. Make sure to use <code>127.0.0.1</code> when connecting to the database instead of localhost.</p>
+</div>
+</div>
+</div>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<h3 class="font-weight-800">Creating a MySQL Database</h3>
+<p>For MySQL, we'll install both the server and client libraries so we can compile the mysql2 rubygem.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$">sudo apt-get install mysql-server mysql-client libmysqlclient-dev</div>
+<div class="line" prefix="deploy$">sudo mysql_secure_installation</div>
+<div class="line" prefix="deploy$"></div>
+<div class="line" prefix="deploy$"><span class="text-muted"># Open the MySQL CLI to create the user and database</span></div>
+<div class="line" prefix="deploy$">mysql -u root -p</div>
+</div>
+</section>
+</div>
+<p>Now we're inside the MySQL command line interface, we can create a database for our app and a special user who only has access to this database. Having an app-specific user will provide better security in case something gets compromised.</p>
+<p>It may look like we're creating two users and that's because MySQL treats users over localhost different than users over an IP address. We're setting it up so you can do both.</p>
+<p>In the following example, make sure you replace the following names:
+</p><ul>
+<li><code>myapp</code> with the name of your database, typically the name of your app</li>
+<li><code>$omeFancyPassword123</code> with your own password</li>
+<li><code>deploy</code> with the name of your database user if you'd like something different</li>
+</ul>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="mysql&gt;">CREATE DATABASE IF NOT EXISTS myapp;</div>
+<div class="line" prefix="mysql&gt;">CREATE USER IF NOT EXISTS 'deploy'@'localhost' IDENTIFIED BY '$omeFancyPassword123';</div>
+<div class="line" prefix="mysql&gt;">CREATE USER IF NOT EXISTS 'deploy'@'%' IDENTIFIED BY '$omeFancyPassword123';</div>
+<div class="line" prefix="mysql&gt;">GRANT ALL PRIVILEGES ON myapp.* TO 'deploy'@'localhost';</div>
+<div class="line" prefix="mysql&gt;">GRANT ALL PRIVILEGES ON myapp.* TO 'deploy'@'%';</div>
+<div class="line" prefix="mysql&gt;">FLUSH PRIVILEGES;</div>
+<div class="line" prefix="mysql&gt;">\q</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</div>
+<section id="capistrano" class="slice bg-orange">
+<div class="container">
+<h6 class="text-center text-white text-uppercase font-weight-800">Chapter 5:</h6>
+<h2 id="vps" class="text-center text-white">Deploying Code</h2>
+<hr>
+<div class="row">
+<div class="col-sm-4 offset-sm-2">
+<p class="text-white">Once we have everything on our server configured and ready to go, we need a way to upload our code to production.</p>
+<p class="text-white">Capistrano is a tool for making copies of your repository in production and then easily making new releases.</p>
+</div>
+<div class="col-sm-3 offset-sm-1">
+<img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/deploying-code-74afba4e2c70915857087c7df7d74ad0b67d8a11555b0eb84369afdb82fb3531.svg">
+</div>
+</div>
+</div>
+</section>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<h3 class="font-weight-800">Setting Up Capistrano</h3>
+<p>Back on our local machine, we can install Capistrano in our Rails app.</p>
+<p>We'll need to add the following gems to our Gemfile:</p>
+<pre><code class="language-ruby">gem 'capistrano', '~&gt; 3.11'
+gem 'capistrano-rails', '~&gt; 1.4'
+gem 'capistrano-passenger', '~&gt; 0.2.0'
+gem 'capistrano-rbenv', '~&gt; 2.1', '&gt;= 2.1.4'</code></pre>
+<p>Once added, we can run the following to install the gems and have Capistrano install its config files:</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>Local Machine</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="$">bundle</div>
+<div class="line" prefix="$">cap install STAGES=production</div>
+</div>
+</section>
+</div>
+<p>This generates several files for us:</p>
+<ul>
+<li><code>Capfile</code></li>
+<li><code>config/deploy.rb</code></li>
+<li><code>config/deploy/production.rb</code></li>
+</ul>
+<p>We're need to edit the <code>Capfile</code> and add the following lines:</p>
+<pre><code>require 'capistrano/rails'
+require 'capistrano/passenger'
+require 'capistrano/rbenv'
+
+set :rbenv_type, :user
+set :rbenv_ruby, '<span class="ruby-version">2.7.1</span>'</code></pre>
+<p>Then we can modify <code>config/deploy.rb</code> to define our application and git repo details.</p>
+<pre><code>set :application, "myapp"
+set :repo_url, "git@github.com:username/myapp.git"
+
+# Deploy to the user's home directory
+set :deploy_to, "/home/deploy/#{fetch :application}"
+
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
+
+# Only keep the last 5 releases to save disk space
+set :keep_releases, 5
+
+# Optionally, you can symlink your database.yml and/or secrets.yml file from the shared directory during deploy
+# This is useful if you don't want to use ENV variables
+# append :linked_files, 'config/database.yml', 'config/secrets.yml'
+</code></pre>
+<p>Now we need to modify <code>config/deploy/production.rb</code> to point to our server's IP address for production deployments. Make sure to replace <code>1.2.3.4</code> with your server's public IP.</p>
+<pre><code>server '1.2.3.4', user: 'deploy', roles: %w{app db web}</code></pre>
+<p>Before we can deploy our app to production, we need to SSH into the server one last time and add our environment variables.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>Local Machine</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="$">ssh deploy@1.2.3.4</div>
+<div class="line" prefix="deploy$">mkdir /home/deploy/myapp</div>
+<div class="line" prefix="deploy$">nano /home/deploy/myapp/.rbenv-vars</div>
+</div>
+</section>
+</div>
+<p>Add any environment variables you need for production to this file.</p>
+<pre><code># For Postgres
+DATABASE_URL=postgresql://deploy:PASSWORD@127.0.0.1/myapp
+
+# For MySQL
+DATABASE_URL=mysql2://deploy:$omeFancyPassword123@localhost/myapp
+
+RAILS_MASTER_KEY=ohai
+SECRET_KEY_BASE=1234567890
+
+STRIPE_PUBLIC_KEY=x
+STRIPE_PRIVATE_KEY=y
+# etc...</code></pre>
+<p>Save this file and these environment variables will be automatically loaded every time you run Ruby commands inside your app's directory on the server.</p>
+<p>Using this method, we can have separate env variables for every application we deploy to this server.</p>
+<p>Now we can deploy our app to production:</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>Local Machine</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="$">cap production deploy</div>
+</div>
+</section>
+</div>
+<p>Open your server's IP in your browser and you should be greeted with your Rails application.</p>
+<p>If you see an error, you can SSH into the server and view the log files to see what's wrong.</p>
+<div class="terminal-window">
+<header>
+<div class="button green"></div>
+<div class="button yellow"></div>
+<div class="button red"></div>
+<span>deploy@1.2.3.4</span>
+</header>
+<section class="terminal">
+<div class="history">
+<div class="line" prefix="deploy$"><span class="text-muted"># To view the Rails logs</span></div>
+<div class="line" prefix="deploy$">less /home/deploy/myapp/current/log/production.log</div>
+<div class="line" prefix="deploy$"><span class="text-muted"># To view the NGINX and Passenger logs</span></div>
+<div class="line" prefix="deploy$">sudo less /var/log/nginx/error.log</div>
+</div>
+</section>
+</div>
+<p>Once you find your error (often times a missing environment variable or config for production), you can fix it and restart or redeploy your app.</p>
+</div>
+</div>
+</div>
+<section id="final-steps" class="slice bg-green">
+<div class="container">
+<h6 class="text-center text-white text-uppercase font-weight-800">Chapter 6:</h6>
+<h2 id="vps" class="text-center text-white">Next Steps</h2>
+<hr>
+<div class="row">
+<div class="col-sm-4 offset-sm-2">
+<p class="text-white font-weight-800">Congratulations! You've deployed your app to production.</p>
+<p class="text-white">There are several things you may want to do like configuring a domain, SSL, backups, and log rotation.</p>
+</div>
+<div class="col-sm-3 offset-sm-1">
+<img class="img-responsive" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/next-steps-cc50c236123b536fc4c4e77cf726327279236eee0058bd34a99c8897fc6eb2b7.svg">
+</div>
+</div>
+</div>
+</section>
+<div class="container my-5">
+<div class="row justify-content-center">
+<div class="col-md-9">
+<h3 class="font-weight-800">Application Management</h3>
+<h3 class="font-weight-800">Setting A Domain</h3>
+<h3 class="font-weight-800">SSL Certificates</h3>
+<h3 class="font-weight-800">Hourly Backups</h3>
+<h3 class="font-weight-800">Log Rotation</h3>
+</div>
+</div>
+</div>
+</article>
+<section class="slice slice-lg bg-dark mt-5">
+<span class="tongue tongue-top"><i class="far fa-angle-down" aria-hidden="true"></i></span>
+<div class="container">
+<script src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ck.5.js"></script>
+<div class="mb-md text-center">
+<h3 data-element="header" class="heading h3 text-white">Subscribe to the newsletter</h3>
+<div class="fluid-paragraph text-center mt-4">
+<p data-element="subheader" class="lead lh-180 text-muted">Join 31,819+ developers who get early access to new screencasts, articles, guides, updates, and more.</p>
+</div>
+</div>
+<div class="row justify-content-center">
+<div class="col-lg-8">
+<form action="https://app.convertkit.com/forms/947399/subscriptions" method="post" data-sv-form="947399" data-uid="24c30e2af0" data-format="inline" data-version="5" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Thanks for subscribing!&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;hide&quot;,&quot;custom_content&quot;:null},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}" min-width="400 500">
+<div data-element="fields">
+<ul class="text-danger" data-element="errors" data-group="alert"></ul>
+<div class="row">
+<div class="col-md-6">
+<div class="form-group">
+<input aria-label="First Name" name="fields[first_name]" required="" placeholder="First Name" type="text" class="form-control form-control-lg">
+</div>
+</div>
+<div class="col-md-6">
+<div class="form-group">
+<input name="email_address" placeholder="Email Address" required="" type="text" class="form-control form-control-lg">
+</div>
+</div>
+</div>
+<div class="form-group">
+<p class="text-center font-italic">By clicking this button, you agree to the GoRails <a class="underline text-muted" target="_blank" href="https://gorails.com/terms">Terms of Service</a> and <a class="underline text-muted" target="_blank" href="https://gorails.com/privacy">Privacy Policy</a>.</p>
+<button data-element="submit" class="btn btn-lg btn-block btn-primary btn-icon">
+<div class="formkit-spinner">
+ <div></div>
+<div></div>
+<div></div>
+</div>
+<span>Subscribe</span>
+</button>
+</div>
+</div>
+<div class="mt-5 text-center font-weight-bold">More of a social being? We're also on <a class="underline text-muted" target="_blank" href="https://twitter.com/gorails">Twitter</a> and <a class="underline text-muted" target="_blank" href="https://youtube.com/gorailstv">YouTube</a>.<p></p>
+
+</div></form>
+</div>
+</div>
+</div></section>
+<div class="container my-5">
+<div class="row">
+<div class="col-md-9 ml-auto mr-auto">
+<div id="discussion" data-controller="discussion" data-id="deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501"><h5 class="mb-4">Comments</h5>
+
+<div class="p-4 bg-white border rounded">
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_11124">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/1"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ce795239ba5dd2384fc2f88ffaff5451.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/11124/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/1">Chris Oliver</a></strong>
+            <span class="badge badge-warning text-sm mx-2">226,820 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_11124"><time datetime="2018-05-11T13:52:24Z" data-local="time-ago" title="May 11, 2018 at 9:52pm PST" aria-label="on May 11, 2018">on May 11, 2018</time></a></small>
+        </div>
+
+          <div>Thanks btihen! I'll get the tutorial updated for its changes shortly!</div>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12101">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/14400"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/63e68f913916ee056f62c9f4f9674118.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12101/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/14400">jinhedev</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12101"><time datetime="2018-09-30T02:47:22Z" data-local="time-ago" title="September 30, 2018 at 10:47am PST" aria-label="on Sep 30, 2018">on Sep 30, 2018</time></a></small>
+        </div>
+
+          <p>I am wondering if there is a variant toturial for the Puma, Nginx and Capistrano setup? Is Puma a less viable app server for production? Can we invoke a small discussion on this?</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12102">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/1"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ce795239ba5dd2384fc2f88ffaff5451.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12102/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/1">Chris Oliver</a></strong>
+            <span class="badge badge-warning text-sm mx-2">226,820 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12102"><time datetime="2018-09-30T03:14:12Z" data-local="time-ago" title="September 30, 2018 at 11:14am PST" aria-label="on Sep 30, 2018">on Sep 30, 2018</time></a></small>
+        </div>
+
+          <p>Something I'll probably add a some point soon now that Puma ships with Rails by default.</p>
+
+<p>Puma is great too, but this tutorial is intended for beginners and Puma requires you to setup, run,  manage, and monitor a separate process on the server independent of NGINX. It's just a lot less beginner friendly in production so that's why Passenger is the default. It's much easier to get up and running to learn the ropes and once you've done it successfully you can swap over to Puma if you like.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12467">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/19375"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/650f65fd9bf70e51d5284bf99bbfd538.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12467/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/19375">Glory Bourlier</a></strong>
+            <span class="badge badge-warning text-sm mx-2">20 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12467"><time datetime="2018-11-28T17:03:12Z" data-local="time-ago" title="November 29, 2018 at 1:03am PST" aria-label="on Nov 29, 2018">on Nov 29, 2018</time></a></small>
+        </div>
+
+          <p>Hello Chris,<br>
+it's the first time I'm trying to deploy an app on a server. <br>
+for the moment i have 2 problems.<br>
+first, optionnal: I don't have secrets.yml, secrets.yml.example and database.yml.example in my rails app. Do I have to create them and if yes what do I put in my secrets.yml (On the other hand, I have credentials.yml.enc and master.key)<br>
+secondly, i'm at the first deploy step and every time i run "cap production deploy" that stop at "git:check" with this message : <br>
+            <a href="mailto:git@git.laguil.de" target="_blank" rel="noopener noreferrer nofollow">git@git.laguil.de</a>: Permission denied (publickey,password).<br>
+      01 fatal: Could not read from remote repository.<br>
+      01<br>
+      01 Please make sure you have the correct access rights<br>
+      01 and the repository exists.<br>
+    I had, beforedeploying, generate a pair of key in the sudo user on the server, I had add this public key to the deploy key section of my repo git. I tried to clone the repo on the server but I have the same message. but on local no problem. Do you have an idea of what I did wrong (I look for a solution on google, I try change the git address and several other things since one day). Did I miss something.<br>
+    And of course thank you very much, Chris, for this article.</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12471">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/1"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ce795239ba5dd2384fc2f88ffaff5451.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12471/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/1">Chris Oliver</a></strong>
+            <span class="badge badge-warning text-sm mx-2">226,820 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12471"><time datetime="2018-11-29T17:06:23Z" data-local="time-ago" title="November 30, 2018 at 1:06am PST" aria-label="on Nov 30, 2018">on Nov 30, 2018</time></a></small>
+        </div>
+
+          <p>Hey Glory!</p>
+
+<p>Sounds like your server can't authenticate with your git repo. There are two options for this.</p>
+
+<ol>
+<li>You can add SSH keys on your server. Take the public key from the server and add it as a deploy key on your git repo.</li>
+<li>Let Capistrano forward your development machine's ssh key to the server and use it to clone your git repo.</li>
+</ol>
+
+<p>I usually use #2.</p>
+
+<p>They outline a bunch of details of this here in the Capistrano docs: <a href="https://capistranorb.com/documentation/getting-started/authentication-and-authorisation/" target="_blank" rel="noopener noreferrer nofollow">https://capistranorb.com/documentation/getting-started/authentication-and-authorisation/</a></p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12472">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/1"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ce795239ba5dd2384fc2f88ffaff5451.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12472/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/1">Chris Oliver</a></strong>
+            <span class="badge badge-warning text-sm mx-2">226,820 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12472"><time datetime="2018-11-29T17:07:38Z" data-local="time-ago" title="November 30, 2018 at 1:07am PST" aria-label="on Nov 30, 2018">on Nov 30, 2018</time></a></small>
+        </div>
+
+          <p>Also, don't worry about secrets.yml. You'll need to symlink master.key on your server though so it can decrypt credentials. You'll go into the shared folder, and create the master.key file and then add it to the list of files to symlink every deploy. That should be all you need for that since the credentials.yml.enc is already stored in your git repo.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12512">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/19375"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/650f65fd9bf70e51d5284bf99bbfd538.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12512/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/19375">Glory Bourlier</a></strong>
+            <span class="badge badge-warning text-sm mx-2">20 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12512"><time datetime="2018-12-03T11:51:33Z" data-local="time-ago" title="December 3, 2018 at 7:51pm PST" aria-label="on Dec 3, 2018">on Dec 3, 2018</time></a></small>
+        </div>
+
+          <p>Hello Chris,<br>
+thanks for your answer.<br>
+About secrets.yml, I found it.<br>
+About git it's exactly the problem. Since the begin I did #1 but as I say that did not work.<br>
+So perhaps I've forgoten to do something, or I don't no what. So to be sur i'm going to delete the server and restart all from the beginning.  I don't really understand the #2 for git authentication on my server, but I'm going to read the docs you send me, I hope that will works this time.<br>
+Thank you again for your work.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12901">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/20059"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/3bc23803369d379226b71ee2f6701564.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12901/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/20059">jp bourdon</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12901"><time datetime="2019-01-21T16:01:14Z" data-local="time-ago" title="January 22, 2019 at 12:01am PST" aria-label="on Jan 22, 2019">on Jan 22, 2019</time></a></small>
+        </div>
+
+          <p>Hello,<br>
+Thanks for this nice tuto !<br>
+I follow instructions but finally I have a problem on cap production deploy.<br>
+Seems to upload from git perfectly but problem with bundle install :</p>
+
+<p>*<em>Your bundle only supports platforms ["x86-mingw32"] but your local platforms are<br>
+["ruby", "x86_64-linux"], and there's no compatible match between those two<br>
+lists.<br>
+*</em><br>
+Can you help me ?<br>
+Thanks</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_12925">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/20109"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ec2c698ce81c638e3b48e4ae961300a0.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/12925/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/20109">Nithil</a></strong>
+            <span class="badge badge-warning text-sm mx-2">770 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_12925"><time datetime="2019-01-26T03:18:17Z" data-local="time-ago" title="January 26, 2019 at 11:18am PST" aria-label="on Jan 26, 2019">on Jan 26, 2019</time></a></small>
+        </div>
+
+          <p>Follow steps mentioned in the below link, hope it solves</p>
+
+<p><a href="https://stackoverflow.com/questions/43429685/how-can-i-resolve-your-bundle-only-supports-platforms-x86-mingw32-but-your/44350326#44350326" target="_blank" rel="noopener noreferrer nofollow">https://stackoverflow.com/questions/43429685/how-can-i-resolve-your-bundle-only-supports-platforms-x86-mingw32-but-your/44350326#44350326</a></p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13012">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/17363"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/7761a21a4efd7f12b5722ec4f3eda3f8.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13012/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/17363">nicholejeannine</a></strong>
+            <span class="badge badge-warning text-sm mx-2">210 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13012"><time datetime="2019-02-08T22:22:33Z" data-local="time-ago" title="February 9, 2019 at 6:22am PST" aria-label="on Feb 9, 2019">on Feb 9, 2019</time></a></small>
+        </div>
+
+          <p>Soo close to deploying... stuck on capistrano... feeling like giving up on it all.. any help is appreciated.</p>
+
+<p><a href="https://gist.github.com/excid3/d951a3770ccda4c6b6b86b9fae4ba97e" target="_blank" rel="noopener noreferrer nofollow">https://gist.github.com/excid3/d951a3770ccda4c6b6b86b9fae4ba97e</a></p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13258">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/16945"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/44b32c2c02bf8f57ba1fe9c6773e2f4f.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13258/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/16945">Bryan Beshore</a></strong>
+            <span class="badge badge-warning text-sm mx-2">230 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13258"><time datetime="2019-03-05T22:59:30Z" data-local="time-ago" title="March 6, 2019 at 6:59am PST" aria-label="on Mar 6, 2019">on Mar 6, 2019</time></a></small>
+        </div>
+
+          <p>I am seeing an odd error (at least odd to me, and I have spent a good portion of the day trying to figure this out to no avail:</p>
+
+<p>I run on local: cap production deploy</p>
+
+<p>Deployment starts, but at deploy:migrate, I have an issue:</p>
+<div><pre><span></span><span>00</span><span>:</span><span>31</span> <span>deploy</span><span>:</span><span>migrate</span>
+      <span>[</span><span>deploy</span><span>:</span><span>migrate</span><span>]</span> <span>Run</span> <span>`</span><span>rake</span> <span>db</span><span>:</span><span>migrate</span><span>`</span>
+<span>00</span><span>:</span><span>31</span> <span>deploy</span><span>:</span><span>migrating</span>
+      <span>01</span> <span>$</span><span>HOME</span><span>/</span><span>.</span><span>rbenv</span><span>/</span><span>bin</span><span>/</span><span>rbenv</span> <span>exec</span> <span>bundle</span> <span>exec</span> <span>rake</span> <span>db</span><span>:</span><span>migrate</span>
+      <span>01</span> <span>rake</span> <span>aborted</span><span>!</span>
+      <span>01</span> <span>PG</span><span>::</span><span>ConnectionBad</span><span>:</span> <span>could</span> <span>not</span> <span>connect</span> <span>to</span> <span>server</span><span>:</span> <span>Connection</span> <span>refused</span>
+      <span>01</span>    <span>Is</span> <span>the</span> <span>server</span> <span>running</span> <span>on</span> <span>host</span> <span>"165.227.190.133"</span> <span>and</span> <span>accepting</span>
+      <span>01</span>    <span>TCP</span><span>/</span><span>IP</span> <span>connections</span> <span>on</span> <span>port</span> <span>5432</span><span>?</span>
+
+<span>...</span>
+<span>...</span>
+
+<span>#&lt;Thread:0x00007fc18a23b8a8@/Users/BryanBeshore/.rbenv/versions/2.5.3/lib/ruby/gems/2.5.0/gems/sshkit-1.18.2/lib/sshkit/runners/parallel.rb:10 run&gt; terminated with exception (report_on_exception is true):</span>
+<span>Traceback</span> <span>(</span><span>most</span> <span>recent</span> <span>call</span> <span>last</span><span>)</span><span>:</span>
+    <span>1</span><span>:</span> <span>from</span> <span>/</span><span>Users</span><span>/</span><span>BryanBeshore</span><span>/</span><span>.</span><span>rbenv</span><span>/</span><span>versions</span><span>/</span><span>2.5.3</span><span>/</span><span>lib</span><span>/</span><span>ruby</span><span>/</span><span>gems</span><span>/</span><span>2.5.0</span><span>/</span><span>gems</span><span>/</span><span>sshkit</span><span>-</span><span>1.18.2</span><span>/</span><span>lib</span><span>/</span><span>sshkit</span><span>/</span><span>runners</span><span>/</span><span>parallel</span><span>.</span><span>rb</span><span>:</span><span>11</span><span>:</span><span>in</span> <span>`</span><span>block</span> <span>(</span><span>2</span> <span>levels</span><span>)</span> <span>in</span> <span>execute</span><span>'</span>
+<span>/</span><span>Users</span><span>/</span><span>BryanBeshore</span><span>/</span><span>.</span><span>rbenv</span><span>/</span><span>versions</span><span>/</span><span>2.5.3</span><span>/</span><span>lib</span><span>/</span><span>ruby</span><span>/</span><span>gems</span><span>/</span><span>2.5.0</span><span>/</span><span>gems</span><span>/</span><span>sshkit</span><span>-</span><span>1.18.2</span><span>/</span><span>lib</span><span>/</span><span>sshkit</span><span>/</span><span>runners</span><span>/</span><span>parallel</span><span>.</span><span>rb</span><span>:</span><span>15</span><span>:</span><span>in</span> <span>`</span><span>rescue</span> <span>in</span> <span>block</span> <span>(</span><span>2</span> <span>levels</span><span>)</span> <span>in</span> <span>execute</span><span>'</span><span>:</span> <span>Exception</span> <span>while</span> <span>executing</span> <span>as</span> <span>deploy</span><span>@165.227.190.133</span><span>:</span> <span>rake</span> <span>exit</span> <span>status</span><span>:</span> <span>1</span> <span>(</span><span>SSHKit</span><span>::</span><span>Runner</span><span>::</span><span>ExecuteError</span><span>)</span>
+<span>rake</span> <span>stdout</span><span>:</span> <span>Nothing</span> <span>written</span>
+<span>rake</span> <span>stderr</span><span>:</span> <span>rake</span> <span>aborted</span><span>!</span>
+<span>PG</span><span>::</span><span>ConnectionBad</span><span>:</span> <span>could</span> <span>not</span> <span>connect</span> <span>to</span> <span>server</span><span>:</span> <span>Connection</span> <span>refused</span>
+    <span>Is</span> <span>the</span> <span>server</span> <span>running</span> <span>on</span> <span>host</span> <span>"165.227.190.133"</span> <span>and</span> <span>accepting</span>
+    <span>TCP</span><span>/</span><span>IP</span> <span>connections</span> <span>on</span> <span>port</span> <span>5432</span><span>?</span>
+</pre></div>
+<p>UPDATE:<br>
+Ok. I am ... an idiot unless I have 5-cups of coffee in me and I take breaks after 10+hrs staring at a computer monitor. </p>
+
+<p>I had two setups for the following when I should have only had one. One was directed to: myapp (literal) and myapp (my actual app). And I directed the IP to my actual IP address instead of 127.0.0.1<br>
+<code>nano ~/myapp/.rbenv-vars</code></p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13259">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/1"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ce795239ba5dd2384fc2f88ffaff5451.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13259/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/1">Chris Oliver</a></strong>
+            <span class="badge badge-warning text-sm mx-2">226,820 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13259"><time datetime="2019-03-05T23:28:31Z" data-local="time-ago" title="March 6, 2019 at 7:28am PST" aria-label="on Mar 6, 2019">on Mar 6, 2019</time></a></small>
+        </div>
+
+          <p>It's saying your Postgres server isn't running, or it can't connect to it through the IP and port. Double check your connection settings and that Postgres is running.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13440">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/13410"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/6c621ee18b244ed15f37980c8a61c3b1.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13440/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/13410">Muhammad Faisal Iqbal</a></strong>
+            <span class="badge badge-warning text-sm mx-2">30 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13440"><time datetime="2019-03-26T19:18:09Z" data-local="time-ago" title="March 27, 2019 at 3:18am PST" aria-label="on Mar 27, 2019">on Mar 27, 2019</time></a></small>
+        </div>
+
+          <p>Thanks a lot for this.<br>
+just one thing beyond this, <br>
+I added sidekiq, now how can I start it and and hanlde auto restart on die etc things?</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13515">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/20864"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/27277de1e36c7308b1c09037f882954e.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13515/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/20864">Juan Alexander Rodríguez Álvarez</a></strong>
+            <span class="badge badge-warning text-sm mx-2">750 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13515"><time datetime="2019-03-28T17:57:56Z" data-local="time-ago" title="March 29, 2019 at 1:57am PST" aria-label="on Mar 29, 2019">on Mar 29, 2019</time></a></small>
+        </div>
+
+          <p>I have problem with yarn I do not load the files js of my application I made this change in the environments / production.rb <code>config.assets.js_compressor = Uglifier.new (harmony: true)</code> <code>config.assets.compile = true</code> so that I compiled the app I do not know what else to do me I get this warning back when I'm doing the deploy </p>
+<div><pre><span></span><span>01</span> <span>warning</span> <span>"@rails/webpacker &gt; postcss-cssnext@3.1.0"</span> <span>has</span> <span>unmet</span> <span>peer</span> <span>dependency</span> <span>"caniuse-lite@^1.0.30000697"</span><span>.</span>
+      <span>01</span> <span>warning</span> <span>" &gt; webpack-dev-server@2.11.2"</span> <span>has</span> <span>unmet</span> <span>peer</span> <span>dependency</span> <span>"webpack@^2.2.0 || ^3.0.0"</span><span>.</span>
+      <span>01</span> <span>warning</span> <span>"webpack-dev-server &gt; webpack-dev-middleware@1.12.2"</span> <span>has</span> <span>unmet</span> <span>peer</span> <span>dependency</span> <span>"webpack@^1.0.0 || ^2.0.0 || ^3.0.0"</span><span>.</span>
+      <span>01</span> <span>[</span><span>4</span><span>/</span><span>4</span><span>]</span> <span>Building</span> <span>fresh</span> <span>packages</span><span>...</span>
+</pre></div>
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13785">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/5540"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/1f41c986fa9a5c49a8a31ddac010fd3b.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13785/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/5540">jorge centonzio</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13785"><time datetime="2019-05-06T02:53:16Z" data-local="time-ago" title="May 6, 2019 at 10:53am PST" aria-label="on May 6, 2019">on May 6, 2019</time></a></small>
+        </div>
+
+          <p>Hello Chris <br>
+I have this error:<br>
+FATAL: password authentication failed for user "deploy"<br>
+How is database.yml configured?</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13827">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/21935"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/361f0f76d16515b9dec617ce684266f3.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13827/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/21935">Seth Tucker</a></strong>
+            <span class="badge badge-warning text-sm mx-2">140 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13827"><time datetime="2019-05-15T16:10:24Z" data-local="time-ago" title="May 16, 2019 at 12:10am PST" aria-label="on May 16, 2019">on May 16, 2019</time></a></small>
+        </div>
+
+          <p>I had an interesting thing happen after following this. The instructions were PERFECT because I could not get Nginx or Apache to work with Puma on the production server after from DigitalOcean. So thank you very much for this guide!</p>
+
+<p>Now I have an interesting issue. After successfully going through this guide, I tried running 'rails s' locally and kept getting the error: <code>(erb):18:in fetch': key not found: "DATABASE_USER" (KeyError)</code></p>
+
+<p>I thought that was strange, because it looks like it's trying to use my production database values rather than the development. I did confirm in my puma.rb file that it's set for the development environment.</p>
+
+<p>I tried commenting out my DB username and pw fields as shown below but I was still getting the same error.</p>
+
+<p>Here's my database.yml file:</p>
+<div><pre><span></span><span># SQLite version 3.x</span>
+<span>#   gem install sqlite3</span>
+<span>#</span>
+<span>#   Ensure the SQLite 3 gem is defined in your Gemfile</span>
+<span>#   gem 'sqlite3'</span>
+<span>#</span>
+<span>default: &amp;default</span>
+<span>  adapter: postgresql</span>
+<span>  pool: </span><span>&lt;%=</span> <span>ENV</span><span>.</span><span>fetch</span><span>(</span><span>"RAILS_MAX_THREADS"</span><span>)</span> <span>{</span> <span>5</span> <span>}</span> <span>%&gt;</span><span></span>
+<span>  timeout: 5000</span>
+
+<span>development:</span>
+<span>  &lt;&lt;: *default</span>
+<span>  database: db/development</span>
+<span>  username: seth</span>
+<span>  password: </span>
+
+<span># Warning: The database defined as "test" will be erased and</span>
+<span># re-generated from your development database when you run "rake".</span>
+<span># Do not set this db to the same as development or production.</span>
+<span>test:</span>
+<span>  &lt;&lt;: *default</span>
+<span>  database: db/test</span>
+
+<span>production:</span>
+<span>  adapter: postgresql</span>
+<span>  pool: </span><span>&lt;%=</span> <span>ENV</span><span>.</span><span>fetch</span><span>(</span><span>"RAILS_MAX_THREADS"</span><span>)</span> <span>{</span> <span>5</span> <span>}</span> <span>%&gt;</span><span></span>
+<span>  timeout: 5000</span>
+<span>  #username: </span><span>&lt;%=</span> <span>ENV</span><span>.</span><span>fetch</span><span>(</span><span>"DATABASE_USER"</span><span>)</span> <span>%&gt;</span><span></span>
+<span>  #password: </span><span>&lt;%=</span> <span>ENV</span><span>.</span><span>fetch</span><span>(</span><span>"DATABASE_PW"</span><span>)</span> <span>%&gt;</span><span></span>
+<span>  database: consumer_law</span>
+</pre></div>
+<p>For now I've just deleted the username and password lines from the file and I'm able to successfully run 'rails s' and get Puma working locally again. It does explicitly show in the startup output that it's set to use the development environment settings.</p>
+
+<p>Any ideas why it's trying to use my production username and password fields in development?</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_15228">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/21935"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/361f0f76d16515b9dec617ce684266f3.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/15228/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/21935">Seth Tucker</a></strong>
+            <span class="badge badge-warning text-sm mx-2">140 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_15228"><time datetime="2020-01-12T20:30:04Z" data-local="time-ago" title="January 13, 2020 at 4:30am PST" aria-label="on Jan 13">on Jan 13</time></a></small>
+        </div>
+
+          <p>FYI the answer is because all environment variables get loaded, even if it's not in that environment. You're better off using the secrets.yml for easier credential management.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13831">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/22002"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/e3639842c60dbd230fa05dc2fd4cecc4.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13831/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/22002">itzbernoulli</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13831"><time datetime="2019-05-19T05:32:10Z" data-local="time-ago" title="May 19, 2019 at 1:32pm PST" aria-label="on May 19, 2019">on May 19, 2019</time></a></small>
+        </div>
+
+          <p>Hello Chris,</p>
+<div><pre><span></span>    passenger-config restart-app /home/deploy/testbootstrap --ignore-app-not-running
+   There are no Phusion Passenger-served applications running whose paths begin with '/home/deploy/testbootstrap'.`
+</pre></div>
+<p>I keep getting this error when I deploy and my site is not accessible through my IP address. It pops up a 404 NOT FOUND.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13916">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/20358"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/8c0cca78902ff41624e8a49b6282cf0b.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13916/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/20358">Al</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13916"><time datetime="2019-06-07T06:43:49Z" data-local="time-ago" title="June 7, 2019 at 2:43pm PST" aria-label="on Jun 7, 2019">on Jun 7, 2019</time></a></small>
+        </div>
+
+          <p>First of all, thank you for the guide.</p>
+
+<p>Question to you about Passenger setup. I'm running Ubuntu 18.04 and did everything like this guide said, but i keep getting an error that <code>*** ERROR: Phusion Passenger doesn't seem to be running. If you are sure that it</code> </p>
+
+<p>Error occurs when cap is running a command to restart Phusion Passenger. </p>
+
+<p>Anyone else ran into this issue?</p>
+
+<hr>
+
+<p><em>Update</em> Sorry,  my fault - for some reason, i commented out a line in passenger conf file where you add rbenv line, and that was messing it up for me. Anyways, thank you again for the guide :)</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13919">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/22019"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/31e03144205671b615fc1a97e16e41f7.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13919/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/22019">jose cedeno</a></strong>
+            <span class="badge badge-warning text-sm mx-2">30 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13919"><time datetime="2019-06-08T15:33:51Z" data-local="time-ago" title="June 8, 2019 at 11:33pm PST" aria-label="on Jun 8, 2019">on Jun 8, 2019</time></a></small>
+        </div>
+
+          <p>hello cris good day, I tell you my problem, I'm following all the steps to do the question until step 4 all right but at the time of deploy I jump an error</p>
+
+<p>NameError: uninitialized constant Dotenv</p>
+
+<p><a href="https://gist.github.com/JoseCed/664ad2516d034605cb8d31705a2795c2" target="_blank" rel="noopener noreferrer nofollow">https://gist.github.com/JoseCed/664ad2516d034605cb8d31705a2795c2</a></p>
+
+<p>I need help, please</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13921">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/22349"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/988eeb339d1c306630f239bb4e7c7cb2.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13921/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/22349">Saunved</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13921"><time datetime="2019-06-09T06:41:51Z" data-local="time-ago" title="June 9, 2019 at 2:41pm PST" aria-label="on Jun 9, 2019">on Jun 9, 2019</time></a></small>
+        </div>
+
+          <p>Here are some links and tips I found helpful while setting up the production server. Feel free to add to this by commenting below or suggest any edits:</p>
+
+<ul>
+<li>Refer to this link to understand how to set up a Rails server on 18.04:
+<a href="https://gorails.com/deploy/ubuntu/18.04" target="_blank" rel="noopener noreferrer nofollow">https://gorails.com/deploy/ubuntu/18.04</a>
+</li>
+<li>Refer to this link if you get a <code>packet_write wait</code> or <code>broken_pipe</code> error: <a href="https://www.digitalocean.com/community/questions/why-am-i-getting-packet_write_wait-connection-to-xxx-xx-xx-xxx-port-22-broken-pipe?answer=41458" target="_blank" rel="noopener noreferrer nofollow">https://www.digitalocean.com/community/questions/why-am-i-getting-packet_write_wait-connection-to-xxx-xx-xx-xxx-port-22-broken-pipe?answer=41458</a>
+This error usually comes up when you are installing Ruby on the production server and the client thinks the server is inactive.</li>
+<li>Make sure <code>database.yml</code>, <code>secrets.yml</code>, <code>application.yml</code> files are <strong>created manually</strong> on the server (in the <code>shared</code> folder)</li>
+<li>Edit <code>nginx /etc/nginx/sites-enabled/app-name</code> file and make sure it points to the correct directory. Refer to this link: <a href="https://www.digitalocean.com/community/tutorials/how-to-move-an-nginx-web-root-to-a-new-location-on-ubuntu-18-04" target="_blank" rel="noopener noreferrer nofollow">https://www.digitalocean.com/community/tutorials/how-to-move-an-nginx-web-root-to-a-new-location-on-ubuntu-18-04</a>
+</li>
+<li>Make sure MySQL privileges are provided to the deploy user</li>
+<li>
+<p>If you are using GitLab, you'll need to generate SSH public and secret keys on the server and then add the public key to the GitLab user settings. <br>
+The steps to do that are as follows:</p>
+
+<ul>
+<li><code>su deploy</code></li>
+<li><code>ssh-keygen -t rsa -b 2048</code></li>
+<li>Press <code>ENTER</code> thrice</li>
+<li>
+<code>cat /home/&lt;user-name&gt;/.ssh/id_rsa.pub</code> to obtain the SSH key</li>
+<li>Navigate to: <a href="https://gitlab.com/profile/keys" target="_blank" rel="noopener noreferrer nofollow">https://gitlab.com/profile/keys</a> and paste your key there</li>
+<li>You should be able to use Capistrano with GitLab now (as long as you have followed all the other instructions in the main article and setup deploy.rb correctly)</li>
+</ul>
+</li>
+<li><p>Make sure production secret key is set (this can be generated locally using <code>rails secret</code>) and then added to the <code>secrets.yml</code> file in the production server</p></li>
+</ul>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13923">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/22019"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/31e03144205671b615fc1a97e16e41f7.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13923/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/22019">jose cedeno</a></strong>
+            <span class="badge badge-warning text-sm mx-2">30 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13923"><time datetime="2019-06-10T15:10:55Z" data-local="time-ago" title="June 10, 2019 at 11:10pm PST" aria-label="on Jun 10, 2019">on Jun 10, 2019</time></a></small>
+        </div>
+
+          <p>Hi, thank you for your interest, but the problem remains the same.</p>
+
+<p><strong>NameError: uninitialized constant Dotenv</strong></p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14493">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/5447"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ac6c1a400a013e6a81093bbdec4b61dc.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14493/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/5447">Aniket Rao</a></strong>
+            <span class="badge badge-warning text-sm mx-2">990 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14493"><time datetime="2019-09-20T07:29:27Z" data-local="time-ago" title="September 20, 2019 at 3:29pm PST" aria-label="on Sep 20, 2019">on Sep 20, 2019</time></a></small>
+        </div>
+
+          <p>Hey, did you fix it?</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13942">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/22331"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/5d39aa14c5aecfd25b86e0246f6e3cc9.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13942/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/22331">monkey</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13942"><time datetime="2019-06-14T09:04:56Z" data-local="time-ago" title="June 14, 2019 at 5:04pm PST" aria-label="on Jun 14, 2019">on Jun 14, 2019</time></a></small>
+        </div>
+
+          <p>when i deploy my rails app to VPS then always appear <br>
+<code>[deploy:migrate] Run</code>rake db:migrate<code><br>
+00:37 deploy:migrating<br>
+      01 $HOME/.rbenv/bin/rbenv exec bundle exec rake db:migrate<br>
+      01 config.eager_load is set to nil. Please update your config/environments/*.rb files accordingly:<br>
+      01<br>
+      01   * development - set it to false<br>
+      01   * test - set it to false (unless you use a tool that preloads your test environment)<br>
+      01   * production - set it to true<br>
+      01<br>
+</code><br>
+            but the config/environments/*.rb already set same to above</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14232">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/14771"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/dbcf35391967f1f80e94f4caae03d323.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14232/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/14771">T. K.</a></strong>
+            <span class="badge badge-warning text-sm mx-2">20 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14232"><time datetime="2019-08-07T08:14:14Z" data-local="time-ago" title="August 7, 2019 at 4:14pm PST" aria-label="on Aug 7, 2019">on Aug 7, 2019</time></a></small>
+        </div>
+
+          <p>hey I had the same problem and it was because I called my capistrano env staging. So for it to work I copied the production.rb to staging.rb in the folder mentioned in the error message and it worked.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_13949">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/22019"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/31e03144205671b615fc1a97e16e41f7.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/13949/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/22019">jose cedeno</a></strong>
+            <span class="badge badge-warning text-sm mx-2">30 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_13949"><time datetime="2019-06-15T17:56:10Z" data-local="time-ago" title="June 16, 2019 at 1:56am PST" aria-label="on Jun 16, 2019">on Jun 16, 2019</time></a></small>
+        </div>
+
+          <p>Thank you very much I have the online project, now I have a question if I create a migration when you run cap production deploy will the migration in production run?</p>
+
+<p>and on the other hand someone could help me on how to run a seed.rb in production.</p>
+
+<p>regards</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14042">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/14940"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/b54a4ea02148dd267eadf0777f196221.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14042/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/14940">Ted Martin</a></strong>
+            <span class="badge badge-warning text-sm mx-2">2,730 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14042"><time datetime="2019-06-29T14:23:03Z" data-local="time-ago" title="June 29, 2019 at 10:23pm PST" aria-label="on Jun 29, 2019">on Jun 29, 2019</time></a></small>
+        </div>
+
+          <p>I keep getting the following error when I am making changes:</p>
+<div><pre><span></span>[2019-06-29T14:18:13.234079 #2060] DEBUG -- :   ^[[1m^[[36mActiveRecord::InternalMetadata Load (0.2ms)^[[0m  ^[[1m^[[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metad
+ata` WHERE `ar_internal_metadata`.`key` = 'environment' LIMIT 1^[[0m
+D, [2019-06-29T14:18:13.237139 #2060] DEBUG -- :   ^[[1m^[[35m (0.1ms)^[[0m  ^[[1m^[[34mSELECT RELEASE_LOCK('3070706570978732700')^[[0m
+</pre></div>
+<p>Everything will deploy fine and the app will work well but when I create datamigrations, this error pops up. I'm using MySQL on both development and production. I can't find anything on Stackoverflow/Google Searches that has helped so I'm hoping someone here has experience in this matter.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14052">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/21935"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/361f0f76d16515b9dec617ce684266f3.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14052/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/21935">Seth Tucker</a></strong>
+            <span class="badge badge-warning text-sm mx-2">140 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14052"><time datetime="2019-07-02T20:02:02Z" data-local="time-ago" title="July 3, 2019 at 4:02am PST" aria-label="on Jul 3, 2019">on Jul 3, 2019</time></a></small>
+        </div>
+
+          <p>Have you checked the table to see if the 'environment' key has been set? This is a fail-safe for Rails apps to make sure that you aren't wiping out a production database by accident.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14115">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/23004"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/3c26b2ac14e7a0e71f65167a896ab22e.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14115/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/23004">Jonas Tavares</a></strong>
+            <span class="badge badge-warning text-sm mx-2">10 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14115"><time datetime="2019-07-16T18:27:22Z" data-local="time-ago" title="July 17, 2019 at 2:27am PST" aria-label="on Jul 17, 2019">on Jul 17, 2019</time></a></small>
+        </div>
+
+          <p>I had some problems to make it works, but after some trys, I did :)<br>
+(I'm so proud rs)<br>
+So, I create many Droplet  on Digitalocean to do got this, and in my last try I installed the rails using <code>gem install rails</code> and every thing works fine.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14140">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/23102"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/8960347fe6998390b819f786e672699c.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14140/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/23102">LeoPaulD</a></strong>
+            <span class="badge badge-warning text-sm mx-2">40 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14140"><time datetime="2019-07-23T14:22:11Z" data-local="time-ago" title="July 23, 2019 at 10:22pm PST" aria-label="on Jul 23, 2019">on Jul 23, 2019</time></a></small>
+        </div>
+
+          <p>Hello I followed this tutorial carefully purpose when I launch nginx, I have this error message....</p>
+
+<blockquote>
+<p>sudo service nginx start</p>
+</blockquote>
+<div><pre><span></span>    Job for nginx.service failed because the control process exited with error code.
+    See "systemctl status nginx.service" and "journalctl -xe" for details.
+</pre></div>
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14141">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/21935"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/361f0f76d16515b9dec617ce684266f3.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14141/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/21935">Seth Tucker</a></strong>
+            <span class="badge badge-warning text-sm mx-2">140 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14141"><time datetime="2019-07-23T15:10:45Z" data-local="time-ago" title="July 23, 2019 at 11:10pm PST" aria-label="on Jul 23, 2019">on Jul 23, 2019</time></a></small>
+        </div>
+
+          <p>@leopauld The service is probably already running. Did you try running the <code>systemctl status nginx</code> to see if it's already running and what the output is?</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14145">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/23102"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/8960347fe6998390b819f786e672699c.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14145/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/23102">LeoPaulD</a></strong>
+            <span class="badge badge-warning text-sm mx-2">40 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14145"><time datetime="2019-07-24T06:27:03Z" data-local="time-ago" title="July 24, 2019 at 2:27pm PST" aria-label="on Jul 24, 2019">on Jul 24, 2019</time></a></small>
+        </div>
+
+          <p>when I write that I have this result :</p>
+<div><pre><span></span> <span>nginx</span><span>.</span><span>service</span> <span>-</span> <span>A</span> <span>high</span> <span>performance</span> <span>web</span> <span>server</span> <span>and</span> <span>a</span> <span>reverse</span> <span>proxy</span> <span>se</span>
+<span>rver</span>
+   <span>Loaded</span><span>:</span> <span>loaded</span> <span>(/</span><span>lib</span><span>/</span><span>systemd</span><span>/</span><span>system</span><span>/</span><span>nginx</span><span>.</span><span>service</span><span>;</span> <span>enabled</span><span>;</span> <span>vendor</span> <span>preset</span><span>:</span> <span>en</span>
+<span>abled</span><span>)</span>
+   <span>Active</span><span>:</span> <span>failed</span> <span>(</span><span>Result</span><span>:</span> <span>exit-code</span><span>)</span> <span>since</span> <span>Tue</span> <span>2019-07-23</span> <span>16</span><span>:</span><span>13</span><span>:</span><span>07</span> <span>C</span>
+<span>EST</span><span>;</span> <span>16h</span> <span>ago</span>
+     <span>Docs</span><span>:</span> <span>man</span><span>:</span><span>nginx</span><span>(</span><span>8</span><span>)</span>
+  <span>Process</span><span>:</span> <span>18148</span> <span>ExecStartPre</span><span>=/</span><span>usr</span><span>/</span><span>sbin</span><span>/</span><span>nginx</span> <span>-t</span> <span>-q</span> <span>-g</span> <span>daemon</span> <span>on</span><span>;</span> <span>master_process</span>
+ <span>on</span><span>;</span> <span>(</span><span>code</span><span>=</span><span>exited</span><span>,</span> <span>status</span><span>=</span><span>203</span><span>/</span><span>EXEC</span><span>)</span>
+</pre></div>
+<p>In /usr/bin I don't have nginx ...</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14146">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/23102"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/8960347fe6998390b819f786e672699c.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14146/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/23102">LeoPaulD</a></strong>
+            <span class="badge badge-warning text-sm mx-2">40 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14146"><time datetime="2019-07-24T07:01:16Z" data-local="time-ago" title="July 24, 2019 at 3:01pm PST" aria-label="on Jul 24, 2019">on Jul 24, 2019</time></a></small>
+        </div>
+
+          <p>It's okay, it works. I removed and reinstalled nginx.<br>
+Thanks</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14147">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/23102"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/8960347fe6998390b819f786e672699c.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14147/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/23102">LeoPaulD</a></strong>
+            <span class="badge badge-warning text-sm mx-2">40 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14147"><time datetime="2019-07-24T08:34:44Z" data-local="time-ago" title="July 24, 2019 at 4:34pm PST" aria-label="on Jul 24, 2019">on Jul 24, 2019</time></a></small>
+        </div>
+
+          <p>Hello, <br>
+I have a problem to deploy, I configured rbenv-vars correctly with my database and my secret key but when I launch cap production deploy, the execution doesn't work... </p>
+<div><pre><span></span><span>deploy</span><span>@1.2.3.4.0</span><span>'</span><span>s</span> <span>password</span><span>:</span>
+<span>00</span><span>:</span><span>00</span> <span>git</span><span>:</span><span>wrapper</span>
+      <span>01</span> <span>mkdir</span> <span>-</span><span>p</span> <span>/</span><span>tmp</span>
+    <span>✔</span> <span>01</span> <span>deploy</span><span>@1.2.3.4.0</span> <span>0.137</span><span>s</span>
+      <span>Uploading</span> <span>/</span><span>tmp</span><span>/</span><span>git</span><span>-</span><span>ssh</span><span>-</span><span>myapp</span><span>-</span><span>production</span><span>-</span><span>username</span><span>.</span><span>sh</span> <span>100.0</span><span>%</span>
+      <span>02</span> <span>chmod</span> <span>700</span> <span>/</span><span>tmp</span><span>/</span><span>git</span><span>-</span><span>ssh</span><span>-</span><span>myapp</span><span>-</span><span>production</span><span>-</span><span>username</span><span>.</span><span>sh</span>
+    <span>✔</span> <span>02</span> <span>deploy</span><span>@1.2.3.4.0</span> <span>0.173</span><span>s</span>
+<span>00</span><span>:</span><span>00</span> <span>git</span><span>:</span><span>check</span>
+      <span>01</span> <span>git</span> <span>ls</span><span>-</span><span>remote</span> <span>git</span><span>@</span><span>github</span><span>.</span><span>com</span><span>:</span><span>UserName</span><span>/</span><span>myapp</span><span>.</span><span>git</span> <span>HEAD</span>
+      <span>01</span> <span>Permission</span> <span>denied</span> <span>(</span><span>publickey</span><span>).</span>
+      <span>01</span> <span>fatal</span><span>:</span> <span>Could</span> <span>not</span> <span>read</span> <span>from</span> <span>remote</span> <span>repository</span><span>.</span>
+      <span>01</span>
+      <span>01</span> <span>Please</span> <span>make</span> <span>sure</span> <span>you</span> <span>have</span> <span>the</span> <span>correct</span> <span>access</span> <span>rights</span>
+      <span>01</span> <span>and</span> <span>the</span> <span>repository</span> <span>exists</span><span>.</span>
+</pre></div>
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14453">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/792"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/0ea747d651c21d4028eafd3e12e302f5.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14453/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/792">Jay Killeen</a></strong>
+            <span class="badge badge-warning text-sm mx-2">2,740 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14453"><time datetime="2019-09-14T20:52:14Z" data-local="time-ago" title="September 15, 2019 at 4:52am PST" aria-label="on Sep 15, 2019">on Sep 15, 2019</time></a></small>
+        </div>
+
+          <p>Hmmm tried this from a fresh rails 6 app.</p>
+
+<p><code>cap production deploy</code> is failing with </p>
+<div><pre><span></span><span>/</span><span>home</span><span>/</span><span>userme</span><span>/</span><span>.</span><span>rbenv</span><span>/</span><span>versions</span><span>/</span><span>2.6.3</span><span>/</span><span>lib</span><span>/</span><span>ruby</span><span>/</span><span>gems</span><span>/</span><span>2.6.0</span><span>/</span><span>gems</span><span>/</span><span>sshkit</span><span>-</span><span>1.20.0</span><span>/</span><span>lib</span><span>/</span><span>sshkit</span><span>/</span><span>runners</span><span>/</span><span>parallel</span><span>.</span><span>rb</span><span>:</span><span>15</span><span>:</span><span>in</span> <span>`</span><span>rescue</span> <span>in</span> <span>block</span> <span>(</span><span>2</span> <span>levels</span><span>)</span> <span>in</span> <span>execute</span><span>'</span><span>:</span> <span>Exception</span> <span>while</span> <span>executing</span> <span>as</span> <span>userme</span><span>@123.456.789.10</span><span>:</span> <span>rake</span> <span>exit</span> <span>status</span><span>:</span> <span>1</span> <span>(</span><span>SSHKit</span><span>::</span><span>Runner</span><span>::</span><span>ExecuteError</span><span>)</span> 
+<span>$</span><span>HOME</span><span>/</span><span>.</span><span>rbenv</span><span>/</span><span>bin</span><span>/</span><span>rbenv</span> <span>exec</span> <span>bundle</span> <span>exec</span> <span>rake</span> <span>assets</span><span>:</span><span>precompile</span>
+<span>Compiling</span><span>…</span>
+<span>Compilation</span> <span>failed</span><span>:</span>
+<span>error</span> <span>Command</span> <span>"webpack"</span> <span>not</span> <span>found</span><span>.</span>
+</pre></div>
+<p><a href="https://github.com/rails/webpacker/blob/master/docs/deployment.md" target="_blank" rel="noopener noreferrer nofollow">Webpacker docs is saying</a> <code>Make sure you have public/packs and node_modules in :linked_dirs</code> for capistrano deployments. Then <code>If you have node_modules added to :linked_dirs you'll need to run yarn install before deploy:assets:precompile</code> and they have a snippet to add to your <code>deploy.rb</code>...</p>
+<div><pre><span></span>before "deploy:assets:precompile", "deploy:yarn_install"
+
+namespace :deploy do
+  desc "Run rake yarn install"
+  task :yarn_install do
+    on roles(:web) do
+      within release_path do
+        execute("cd #{release_path} &amp;&amp; yarn install --silent --no-progress --no-audit --no-optional")
+      end
+    end
+  end
+end
+</pre></div>
+<p>Testing this now to see if it works... 10 mins later... nope... still busted... will try again later :/</p>
+
+<p>I believe I may need to add <code>capistrano-npm</code> to my Gemfile so <code>npm install</code> can be run in the capistrano deploy scripts.</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14706">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/26416"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/20b4afc9c6cc5ef0078ff19278be3288.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14706/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/26416">Ian Shields</a></strong>
+            <span class="badge badge-warning text-sm mx-2">20 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14706"><time datetime="2019-10-27T12:41:30Z" data-local="time-ago" title="October 27, 2019 at 8:41pm PST" aria-label="on Oct 27, 2019">on Oct 27, 2019</time></a></small>
+        </div>
+
+          <p>I have the same problem.  Any luck figuring this out?</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_14743">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/25775"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/4bcaf949d15fe6a2e7fcc466cf28e49a.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/14743/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/25775">Andres Peña</a></strong>
+            <span class="badge badge-warning text-sm mx-2">220 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_14743"><time datetime="2019-11-04T22:16:14Z" data-local="time-ago" title="November 5, 2019 at 6:16am PST" aria-label="on Nov 5, 2019">on Nov 5, 2019</time></a></small>
+        </div>
+
+          <p>Do you have any tutorials to setup replicas for the database and load balancers?</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_15073">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/9291"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/896baf5b902ad913a510a781123df90f.png"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/15073/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/9291">Andre Antonov</a></strong>
+            <span class="badge badge-warning text-sm mx-2">4,610 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_15073"><time datetime="2019-12-21T14:04:21Z" data-local="time-ago" title="December 21, 2019 at 10:04pm PST" aria-label="on Dec 21, 2019">on Dec 21, 2019</time></a></small>
+        </div>
+
+          <p>Ubuntu 18.04, Digitalocean</p>
+
+<p>rbenv getting error with information that it can be installed with apt package.</p>
+<div><pre><span></span>root@testinghttp:~# git clone https://github.com/rbenv/rbenv-vars.git ~/.rbenv/plugins/rbenv-vars
+Cloning into '/root/.rbenv/plugins/rbenv-vars'...
+remote: Enumerating objects: 97, done.
+remote: Total 97 (delta 0), reused 0 (delta 0), pack-reused 97
+Unpacking objects: 100% (97/97), done.
+root@testinghttp:~# exec $SHELL
+
+Command 'rbenv' not found, but can be installed with:
+
+apt install rbenv
+
+root@testinghttp:~# rbenv install 2.6.5
+
+Command 'rbenv' not found, but can be installed with:
+</pre></div>
+<p>rbenv cloned.</p>
+<div><pre><span></span>-rw-------  1 root root 1057 Dec 21 13:58 .bash_history
+-rw-r--r--  1 root root 3222 Dec 21 13:57 .bashrc
+drwx------  2 root root 4096 Dec 21 13:53 .cache/
+-rw-r--r--  1 root root    0 Dec 21 13:37 .cloud-locale-test.skip
+drwxr-xr-x  3 root root 4096 Dec 21 14:08 .gem/
+-rw-r--r--  1 root root  148 Aug 17  2015 .profile
+drwxr-xr-x  5 root root 4096 Dec 21 14:07 .rbenv/
+drwx------  2 root root 4096 Dec 21 13:37 .ssh/
+-rw-------  1 root root  761 Dec 21 14:09 .viminfo
+</pre></div>
+<p>.bashrc</p>
+<div><pre><span></span># enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+#if [ -f /etc/bash_completion ] &amp;&amp; ! shopt -oq posix; then
+#    . /etc/bash_completion
+#fi
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+</pre></div>
+<p>please give it a fresh install test :thumbsup</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_15075">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/1"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ce795239ba5dd2384fc2f88ffaff5451.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/15075/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/1">Chris Oliver</a></strong>
+            <span class="badge badge-warning text-sm mx-2">226,820 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_15075"><time datetime="2019-12-21T18:03:48Z" data-local="time-ago" title="December 22, 2019 at 2:03am PST" aria-label="on Dec 22, 2019">on Dec 22, 2019</time></a></small>
+        </div>
+
+          <p>Sounds like you missed the <code>exec $SHELL</code> step.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+    
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_15089">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/28500"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/5004d1a8edf7e1320f50bef3c6878882.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/15089/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/28500">Levent</a></strong>
+            <span class="badge badge-warning text-sm mx-2">30 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_15089"><time datetime="2019-12-25T18:52:10Z" data-local="time-ago" title="December 26, 2019 at 2:52am PST" aria-label="on Dec 26, 2019">on Dec 26, 2019</time></a></small>
+        </div>
+
+          <p>Hello. Thanks for this valuable tutorial. I'm at the last stage. I'm just getting a error message.</p>
+
+<p>ERROR MESSAGE:<br>
+The application encountered the following error: ActiveSupport::MessageEncryptor::InvalidMessage (ActiveSupport::MessageEncryptor::InvalidMessage)</p>
+
+
+      </div>
+
+      <div class="replies">
+            <div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_15096">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/28500"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/5004d1a8edf7e1320f50bef3c6878882.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/15096/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/28500">Levent</a></strong>
+            <span class="badge badge-warning text-sm mx-2">30 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_15096"><time datetime="2019-12-26T10:04:45Z" data-local="time-ago" title="December 26, 2019 at 6:04pm PST" aria-label="on Dec 26, 2019">on Dec 26, 2019</time></a></small>
+        </div>
+
+          <p>Deployment is smooth. This error occurs when I open my server's IP in my browser.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_15100">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/1"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/ce795239ba5dd2384fc2f88ffaff5451.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/15100/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/1">Chris Oliver</a></strong>
+            <span class="badge badge-warning text-sm mx-2">226,820 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_15100"><time datetime="2019-12-27T00:46:46Z" data-local="time-ago" title="December 27, 2019 at 8:46am PST" aria-label="on Dec 27, 2019">on Dec 27, 2019</time></a></small>
+        </div>
+
+          <p>Sounds like you're simply missing the RAILS_MASTER_KEY env var. Set that up so that Rails can decrypt the credentials and you will be set.</p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+                <div class="mt-4">
+                  
+<div class="forum_post d-flex flex-row media mb-2" id="forum_post_15102">
+    <div class="d-none d-lg-block"><a href="https://gorails.com/users/28500"><img class="rounded-circle avatar" height="36" width="36" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/5004d1a8edf7e1320f50bef3c6878882.jpeg"></a></div>
+
+  <div class="ml-3 min-width-0 flex-grow-1">
+      <div class="media-body ">
+        <div class="h6 my-0">
+          <div class="dropdown float-right">
+            <a class="dropdown-toggle text-muted" href="https://gorails.com/deploy/ubuntu/18.04#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" data-confirm="Are you sure you want to mark this post as spam?" rel="nofollow" data-method="put" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501/forum_posts/15102/report">Report spam</a>
+            </div>
+          </div>
+
+            <strong class="forum-post-user"><a class="text-dark" href="https://gorails.com/users/28500">Levent</a></strong>
+            <span class="badge badge-warning text-sm mx-2">30 XP</span>
+          <small class="text-sm text-muted"><a class="text-muted" href="https://gorails.com/forum/deploy-ubuntu-18-04-bionic-beaver-discussion-c51f1daa-b1b0-4cc5-9a7f-9be06048d501#forum_post_15102"><time datetime="2019-12-27T14:28:08Z" data-local="time-ago" title="December 27, 2019 at 10:28pm PST" aria-label="on Dec 27, 2019">on Dec 27, 2019</time></a></small>
+        </div>
+
+          <p>Thank you, Chris. This worked for me. </p>
+
+
+      </div>
+
+      <div class="replies">
+      </div>
+
+
+  </div>
+</div>
+
+                </div>
+            </div>
+      </div>
+
+      <div data-controller="reply">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+              <a class="text-muted" href="https://gorails.com/users/sign_in"><i class="fas fa-reply " aria-hidden="true"></i> Reply</a>
+          </li>
+        </ul>
+
+        
+      </div>
+
+  </div>
+</div>
+
+    <hr>
+
+  
+  <div class="text-center">
+  <a class="btn btn-outline-primary btn-circle btn-icon mx-2" href="https://gorails.com/users/sign_in">
+    <span class="btn-inner--text">Login</span>
+    <span class="btn-inner--icon"><i class="fas fa-angle-right" aria-hidden="true"></i></span>
+</a>  or
+  <a class="btn btn-primary btn-circle btn-icon mx-2" href="https://gorails.com/users/sign_up">
+    <span class="btn-inner--text">Create An Account</span>
+    <span class="btn-inner--icon"><i class="fas fa-angle-right" aria-hidden="true"></i></span>
+</a>  to join the conversation.
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="footer footer-light bg-white">
+<div class="container">
+<div class="row pt-md">
+<div class="col-lg-4 mb-5 mb-lg-0">
+<a href="https://gorails.com/"><img data-src="https://d2i2nj5el4wq1j.cloudfront.net/assets/logo-603a6fca4061e4f05b3c6aa366499601ed24e78bc2becd559fed2ddbb1b7fb33.svg" class="mb-3" style="max-height:24px" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/logo-603a6fca4061e4f05b3c6aa366499601ed24e78bc2becd559fed2ddbb1b7fb33.svg"></a>
+<p class="text-sm">Ruby on Rails guides, screencasts, and tutorials for web developers learning Ruby, Rails, Javascript, Turbolinks, Stimulus.js, Vue.js, and more.</p>
+<div class="copyright"><small>Icons by <a target="_blank" rel="noopener noreferrer" href="https://icons8.com/">Icons8</a></small></div>
+</div>
+<div class="col-lg-2 col-6 col-sm-4 ml-lg-auto mb-5 mb-lg-0">
+<h6 class="heading mb-3">Platform</h6>
+<ul class="list-unstyled">
+<li><a href="https://gorails.com/pricing">Pricing</a></li>
+<li><a href="https://gorails.com/testimonials">Testimonials</a></li>
+<li><a href="https://gorails.com/tool_categories">Rails Tools</a></li>
+<li><a href="https://gorails.com/blog">Blog</a></li>
+</ul>
+</div>
+<div class="col-lg-2 col-6 col-sm-4 mb-5 mb-lg-0">
+<h6 class="heading mb-3">Extras</h6>
+<ul class="list-unstyled text-small">
+<li><a target="_blank" rel="noopener" href="https://hatchbox.io/">Deploy Rails</a></li>
+<li><a target="_blank" rel="noopener" href="https://courses.gorails.com/">Courses</a></li>
+<li><a target="_blank" rel="noopener" href="https://remoteruby.transistor.fm/?utm_source=gorails&amp;utm_medium=homepage">Podcast</a></li>
+<li><a target="_blank" rel="noopener noreferrer" href="http://gorails.storenvy.com/">T-Shirts</a></li>
+</ul>
+</div>
+<div class="col-lg-2 col-sm-4 mb-5 mb-lg-0">
+<h6 class="heading mb-3">Company</h6>
+<ul class="list-unstyled">
+<li><a target="_blank" rel="noopener" href="https://gorails.uservoice.com/forums/259979-general">Support</a></li>
+<li><a href="https://gorails.com/terms">Terms</a></li>
+<li><a href="https://gorails.com/privacy">Privacy</a></li>
+<li><a href="https://gorails.com/about">About</a></li>
+</ul>
+</div>
+</div>
+<div class="row align-items-center justify-content-md-between py-4 mt-4 delimiter-top">
+<div class="col-md-6">
+<div class="copyright text-sm font-weight-bold text-center text-md-left">
+© 2020 <a href="https://gorails.com/" class="font-weight-bold" target="_blank">GoRails, LLC</a>. All rights reserved.
+</div>
+</div>
+<div class="col-md-6">
+<ul class="nav justify-content-center justify-content-md-end mt-3 mt-md-0">
+<li class="nav-item">
+<a class="nav-link" href="https://github.com/gorails-screencasts" target="_blank">
+<i class="fab fa-github" aria-hidden="true"></i>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://twitter.com/gorails" target="_blank">
+<i class="fab fa-twitter" aria-hidden="true"></i>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://www.facebook.com/gorails" target="_blank">
+<i class="fab fa-facebook" aria-hidden="true"></i>
+</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://www.youtube.com/gorailstv" target="_blank">
+<i class="fab fa-youtube" aria-hidden="true"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['ProfitWellObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m);
+  })(window,document,'script','https://dna8twue3dlxq.cloudfront.net/js/profitwell.js','profitwell');
+  profitwell('auth_token', '631ab5d1fb3171ff43ec050548d320b7'); // Your unique Profitwell public API token
+</script>
+
+<script>
+document.addEventListener("turbolinks:load", function() {
+var imgDefer = document.getElementsByTagName('img');
+for (var i=0; i<imgDefer.length; i++) {
+if(imgDefer[i].getAttribute('data-src')) {
+imgDefer[i].setAttribute('src',imgDefer[i].getAttribute('data-src'));
+} } });
+</script>
+
+
+<iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Deploy Ruby On Rails to Ubuntu 18.04 Bionic Beaver (2019 Update) _ GoRails_files/m-outer-a0f6c1465b8d9aab778cf2913d1d3c86.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe></body></html>
