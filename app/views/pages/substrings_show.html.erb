@@ -1,0 +1,52 @@
+
+<%= render "header"%>
+
+
+
+<!-- Begin page content -->
+<main role="main" class="flex-shrink-0">
+  <div class="container">
+    <h1 class="mt-5">Substrings</h1>
+    <p class="lead"> </p>
+    <p>  </p>
+
+<p>
+</p>
+
+
+<p> Implement a method #substrings that takes a word or multiple words as the first argument and then an array of valid substrings (your dictionary) as the second argument. It should return a hash listing each substring (case insensitive) that was found in the original string and how many times it was found.
+    The order of the substrings is NOT important.</p>
+
+  <p> INPUT:  "below", ["below","down","go","going","horn","how","howdy","it","i","low","own","part","partner","sit"] </p>
+  <p>OUTPUT:  { "below" => 1, "low" => 1 } </p>
+
+  <p> INPUT:  "Howdy partner, sit down! How's it going?", ["below","down","go","going","horn","how","howdy","it","i","low","own","part","partner","sit"] </p>
+  <p>OUTPUT:  { "down" => 1, "how" => 2, "howdy" => 1,"go" => 1, "going" => 1, "it" => 2, "i" => 3, "own" => 1,"part" => 1,"partner" => 1,"sit" => 1 } </p>
+
+
+<p>
+Quick Tips:
+Make sure your method can handle multiple words.
+Recall how to turn strings into arrays and arrays into strings.
+You probably should convert everything to lowercase for comparison.
+</p>
+
+
+<strong> INPUT: </strong>
+<pre class="container p-3 my-3 border bg-dark text-white"><%= @input %></pre>
+
+<strong > OUTPUT: </strong>
+<pre class="container p-3 my-3 border bg-dark text-white"><%= @output %></pre>
+
+<div class=""> <%= link_to "Submit another", substrings_problem_path, class: "btn btn-dark my-2 my-sm-0" %> </div>
+
+ </div>
+
+
+
+
+</main>
+
+
+
+<%= render "footer"%>
