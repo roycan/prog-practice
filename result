@@ -1,0 +1,16 @@
+
+[1mFrom:[0m /home/roy/projects/progprac/ruby_practice.rb:33 Object#integer_to_roman:
+
+    [1;34m26[0m: [32mdef[0m [1;34minteger_to_roman[0m(roman_mapping, number, result = [31m[1;31m"[0m[31m[1;31m"[0m[31m[0m)
+    [1;34m27[0m:   [32mreturn[0m result [32mif[0m number == [1;34m0[0m
+    [1;34m28[0m: 
+    [1;34m29[0m:   roman_mapping.keys.each [32mdo[0m |divisor|
+    [1;34m30[0m:     quotient, remainder = number.divmod divisor
+    [1;34m31[0m:     result << roman_mapping[divisor] * quotient
+    [1;34m32[0m:     [32mreturn[0m integer_to_roman(roman_mapping, remainder, result) [32mif[0m quotient > [1;34m0[0m
+ => [1;34m33[0m:     binding.pry
+    [1;34m34[0m:   [32mend[0m
+    [1;34m35[0m: 
+    [1;34m36[0m: 
+    [1;34m37[0m: [32mend[0m
+
